@@ -9,7 +9,7 @@
 //TO REMOVE
 # include <stdio.h>
 
-# define ARGS_NUMBER 4
+# define NARGS 5
 
 typedef struct s_args
 {
@@ -19,15 +19,20 @@ typedef struct s_args
 	char	**cmd1;
 	char	**cmd2;
 	char	**pathv;
+	char	**envp_ptr;
 }	t_args;
 
 //UTILS
 //Ultimately to be moved to libft submodule
 char	*get_env_var(char const *envp[], char *var_name);
 void	ft_print_split(char **split_arr, char *name);
+void	ft_strcat_iter(char **vector, char *to_cat);
 
 //INIT FUNCTIONS
 void	args_init(t_args *args);
-void	parse_args(t_args *args, int argc, char const *argv[], char const *envp[]);
+void	parse_args(t_args *args, int argc, char const **argv, char const **envp);
+
+//TEST FUNCTIONS
+void	access_test(t_args *args);
 
 #endif

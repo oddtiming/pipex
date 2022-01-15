@@ -20,7 +20,7 @@ char	*get_env_var(char const *envp[], char *var_name)
 		{
 			envp_strlen = ft_strlen(envp[i]);
 			var_val = malloc(envp_strlen - var_strlen);
-			var_val = ft_strncpy(var_val, envp[i] + var_strlen + 1, envp_strlen - var_strlen);
+			var_val = ft_strncpy(var_val, (char *)envp[i] + var_strlen + 1, envp_strlen - var_strlen);
 			return (var_val);
 		}
 		i++;
@@ -39,6 +39,19 @@ void	ft_print_split(char **split_arr, char *name)
 	while (split_arr && split_arr[i])
 	{
 		printf("{%s} split_arr[%d] = \"%s\"\n", name, i, split_arr[i]);
+		i++;
+	}
+	return ;
+}
+
+void	ft_strcat_iter(char **vector, char *to_cat)
+{
+	int	i;
+
+	i = 0;
+	while (vector && vector[i])
+	{
+		vector[i] = ft_strjoin_free(vector[i], to_cat);
 		i++;
 	}
 	return ;
