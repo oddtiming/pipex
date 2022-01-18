@@ -35,7 +35,7 @@ int	ft_exec_cmd1(t_args *args)
 	}
 
 	close(pipe_fds[0]);
-	dup2(STDOUT_FILENO, pipe_fds[1]);
-	wait_id = waitid(proc_id, &status, 0);
+	dup2(pipe_fds[1], STDOUT_FILENO);
+	wait_id = waitpid(proc_id, &status, 0);
 	return (WEXITSTATUS(status));
 }

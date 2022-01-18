@@ -1,0 +1,12 @@
+Makefile
+Makefile_ex
+README.md
+colors.txt
+colors1.txt
+incl
+libft
+obj
+pipex
+pipex.dSYM
+result.txt
+src

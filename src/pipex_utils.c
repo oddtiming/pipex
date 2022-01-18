@@ -6,9 +6,9 @@
 //See Notion page for more details
 char	*get_env_var(char const *envp[], char *var_name)
 {
-	int	var_strlen;
-	int	envp_strlen;
-	int	i;
+	int		var_strlen;
+	int		envp_strlen;
+	int		i;
 	char	*var_val;
 
 	i = 0;
@@ -35,7 +35,6 @@ void	ft_print_split(char **split_arr, char *name)
 	int	i;
 
 	i = 0;
-
 	while (split_arr && split_arr[i])
 	{
 		printf("{%s} split_arr[%d] = \"%s\"\n", name, i, split_arr[i]);
@@ -44,14 +43,15 @@ void	ft_print_split(char **split_arr, char *name)
 	return ;
 }
 
-void	ft_strcat_iter(char **vector, char *to_cat)
+//NOTE: ft_strcat_iter assumes that the array is populated by malloced strings
+void	ft_strcat_iter(char **array, char *to_cat)
 {
 	int	i;
 
 	i = 0;
-	while (vector && vector[i])
+	while (array && array[i])
 	{
-		vector[i] = ft_strjoin_free(vector[i], to_cat);
+		array[i] = ft_strjoin_free(array[i], to_cat);
 		i++;
 	}
 	return ;
