@@ -35,11 +35,14 @@ void	ft_print_split(char **split_arr, char *name)
 	int	i;
 
 	i = 0;
-	while (split_arr && split_arr[i])
+	if (!split_arr)
+		return ;
+	while (split_arr[i])
 	{
 		printf("{%s} split_arr[%d] = \"%s\"\n", name, i, split_arr[i]);
 		i++;
 	}
+	printf("{%s} Is it null-terminated: split_arr[%d] = %s\n", name, i, split_arr[i]);
 	return ;
 }
 

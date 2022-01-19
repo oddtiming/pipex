@@ -13,13 +13,12 @@
 
 typedef struct s_args
 {
-	int		argc;
 	char	*in_file;
 	char	*out_file;
-	char	**cmd1;
-	char	**cmd2;
 	char	**pathv;
 	char	**envp_ptr;
+	char	***cmds;
+	int		cmds_count;
 }	t_args;
 
 //UTILS
@@ -34,5 +33,6 @@ void	parse_args(t_args *args, int argc, char const **argv, char const **envp);
 
 //TEST FUNCTIONS
 void	access_test(t_args *args);
+void	parse_test(t_args *args);
 
 #endif

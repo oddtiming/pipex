@@ -1,7 +1,7 @@
 #include "../incl/pipex.h"
 #include "../libft/libft.h"
 
-int	try_exec(t_args *args)
+int	try_exec(t_args *args, int cmd_index)
 {
 	int		i;
 	char	*curr_path;
@@ -9,28 +9,32 @@ int	try_exec(t_args *args)
 	i = 0;
 	while (args->pathv[i])
 	{
-		curr_path = ft_strjoin(args->pathv[i], args->cmd1[0]);
-		execve(curr_path, args->cmd1, args->envp_ptr);
+		curr_path = ft_strjoin(args->pathv[i], args->cmds[cmd_index][0]);
+		execve(curr_path, args->cmds[cmd_index], args->envp_ptr);
 		i++;
 	}
+	//This will only be reached if execve() fails
 	return (-1);
 }
 
-int	ft_exec_cmd1(t_args *args)
+int	ft_exec(t_args *args, int cmd_index)
 {
 	pid_t	proc_id;
 	pid_t	wait_id;
 	int		pipe_fds[2];
 	int		status;
 
+	// to remove
+	(void)cmd_index;
+	// end of remove
 	pipe(pipe_fds);
 	proc_id = fork();
 	if (proc_id == 0)
 	{
 		close(pipe_fds[1]);
 		status = dup2(pipe_fds[0], STDIN_FILENO);
-		close(pipe_fds[0])
-		if (try_exec(args))
+		close(pipe_fds[0]);
+		if (try_exec(args, 1))
 			exit(1);
 	}
 
