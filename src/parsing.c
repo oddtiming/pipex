@@ -40,39 +40,35 @@ void	parse_test(t_args *args)
 	free(buff);
 }
 
-void	args_init(t_args *args)
+void	args_init(t_args **args)
 {
-	*args = *(t_args *)malloc(sizeof(t_args));
-	ft_bzero((void *)args, sizeof(t_args));
+	*args = malloc(sizeof(t_args));
+	ft_bzero(*args, sizeof(t_args));
+
 }
 
 void	parse_args(t_args *args, int argc, char const *argv[], char const *envp[])
 {
 	char	*path_full;
 	int		i;
-	
-	i = 0;
-	printf("in parse_args, ARG_NUMBERS = %d and argc = %d\n", NARGS, argc);
-	if (argc < (NARGS))
-	{
-		write(2, "pipex: wrong # of args, pal.\n", ft_strlen("pipex: wrong # of args, pal.\n"));
-		exit(2);
-	}
+
 	//Since argv[0], argv[1], and argv[argc-1] are not commands
 	args->cmds_count = argc - 3;
+	args_init(&args);
 	args->in_file = ft_strdup(argv[1]);
 	if ((path_full = get_env_var(envp, "PATH")) != NULL)
 	{
 		args->pathv = ft_split(path_full, ':');
 		ft_strcat_iter(args->pathv, "/");
+		free(path_full);
 	}
 	//to remove:
 	(void) argc;
 	(void) argv;
 	(void) envp;
-	ft_print_split(args->pathv, "pathv");
 	//end of remove
 	args->cmds = malloc(sizeof(char ***));
+	i = 0;
 	while (i < args->cmds_count)
 	{
 		args->cmds[i] = ft_split(argv[i + 2], ' ');
@@ -81,8 +77,6 @@ void	parse_args(t_args *args, int argc, char const *argv[], char const *envp[])
 	}
 	//NULL-terminate the array of char arrays.
 	args->cmds[i] = NULL;
-	// args->cmd1 = ft_split(argv[2], ' ');
-	// args->cmd2 = ft_split(argv[3], ' ');
 	args->out_file = ft_strdup(argv[argc - 1]);
 	args->envp_ptr = (char **)envp;
 	parse_test(args);

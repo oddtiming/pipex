@@ -9,7 +9,7 @@
 //TO REMOVE
 # include <stdio.h>
 
-# define NARGS 5
+# define ARGC_MIN 5
 
 typedef struct s_args
 {
@@ -28,7 +28,7 @@ void	ft_print_split(char **split_arr, char *name);
 void	ft_strcat_iter(char **vector, char *to_cat);
 
 //INIT FUNCTIONS
-void	args_init(t_args *args);
+void	args_init(t_args **args);
 void	parse_args(t_args *args, int argc, char const **argv, char const **envp);
 
 //TEST FUNCTIONS
