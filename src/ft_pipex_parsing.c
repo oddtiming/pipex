@@ -1,5 +1,4 @@
 #include "../incl/pipex.h"
-#include "../libft/libft.h"
 
 void	parse_test(t_args *args)
 {
@@ -47,7 +46,7 @@ void	args_init(t_args **args)
 
 }
 
-void	parse_args(t_args *args, int argc, char const *argv[], char const *envp[])
+void	pipex_parse_args(t_args *args, int argc, char const *argv[], char const *envp[])
 {
 	char	*path_full;
 	int		i;
@@ -55,7 +54,12 @@ void	parse_args(t_args *args, int argc, char const *argv[], char const *envp[])
 	//Since argv[0], argv[1], and argv[argc-1] are not commands
 	args->cmds_count = argc - 3;
 	args_init(&args);
-	args->in_file = ft_strdup(argv[1]);
+	//Set args->in_file
+	if (argv[1][0] != '/')
+		args->in_file = ft_strjoin((char const *)ft_get_last_token(get_env_var(envp, "PWD"), '/'), argv[1]);
+	else
+		args->in_file = ft_strdup(argv[1]);
+	//Set args->pathv[] from $PATH in envp[], each path its own string in pathv[]
 	if ((path_full = get_env_var(envp, "PATH")) != NULL)
 	{
 		args->pathv = ft_split(path_full, ':');
@@ -67,17 +71,22 @@ void	parse_args(t_args *args, int argc, char const *argv[], char const *envp[])
 	(void) argv;
 	(void) envp;
 	//end of remove
-	args->cmds = malloc(sizeof(char ***));
+	//Set the cmds into their respective positions in args->cmds[]
 	i = 0;
+	args->cmds = malloc(sizeof(char ***));
 	while (i < args->cmds_count)
 	{
 		args->cmds[i] = ft_split(argv[i + 2], ' ');
-		//NEED TO ADD A MALLOC_CHECK HERE
+		//NEED TO ADD A MALLOC_CHECK HERE todo
 		i++;
 	}
 	//NULL-terminate the array of char arrays.
 	args->cmds[i] = NULL;
-	args->out_file = ft_strdup(argv[argc - 1]);
+	//Set args->out_file
+	if (argv[argc - 1][0] != '/')
+		args->out_file = ft_strjoin((char const *)ft_get_last_token(get_env_var(envp, "PWD"), '/'), argv[argc - 1]);
+	else
+		args->out_file = ft_strdup(argv[argc - 1]);
 	args->envp_ptr = (char **)envp;
 	parse_test(args);
 	return ;
