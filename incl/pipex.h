@@ -33,14 +33,17 @@ char	*ft_get_last_token(char *string, char delimiter);
 void	pipex_cleanup_args(t_args *args);
 
 //INIT FUNCTIONS
-void	args_init(t_args **args);
+void	args_init(t_args *args);
 void	pipex_parse_args(t_args *args, int argc, char const **argv, char const **envp);
 
 //REDIRECTIONS
 void	pipex_redirect_in_file(t_args *args);
+void	pipex_redirect_out_file(t_args *args);
 
 //EXECUTION
 void	pipex_execute_cmds(t_args *args);
+void	pipex_execute_cmd1(t_args *args);
+void	pipex_execute_cmd2(t_args *args, int read_end_fd);
 
 //TEST FUNCTIONS
 void	access_test(t_args *args);

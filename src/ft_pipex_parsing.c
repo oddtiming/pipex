@@ -39,11 +39,9 @@ void	parse_test(t_args *args)
 	free(buff);
 }
 
-void	args_init(t_args **args)
+void	args_init(t_args *args)
 {
-	*args = malloc(sizeof(t_args));
-	ft_bzero(*args, sizeof(t_args));
-
+	ft_bzero((void *)args, sizeof(t_args));
 }
 
 void	pipex_parse_args(t_args *args, int argc, char const *argv[], char const *envp[])
@@ -52,12 +50,12 @@ void	pipex_parse_args(t_args *args, int argc, char const *argv[], char const *en
 	int		i;
 
 	//Since argv[0], argv[1], and argv[argc-1] are not commands
+	args_init(args);
 	args->cmds_count = argc - 3;
-	args_init(&args);
 	//Set args->in_file
-	if (argv[1][0] != '/')
-		args->in_file = ft_strjoin((char const *)ft_get_last_token(get_env_var(envp, "PWD"), '/'), argv[1]);
-	else
+	// if (argv[1][0] != '/')
+	// 	args->in_file = ft_strjoin((char const *)ft_get_last_token(get_env_var(envp, "PWD"), '/'), argv[1]);
+	// else
 		args->in_file = ft_strdup(argv[1]);
 	//Set args->pathv[] from $PATH in envp[], each path its own string in pathv[]
 	if ((path_full = get_env_var(envp, "PATH")) != NULL)
@@ -83,9 +81,9 @@ void	pipex_parse_args(t_args *args, int argc, char const *argv[], char const *en
 	//NULL-terminate the array of char arrays.
 	args->cmds[i] = NULL;
 	//Set args->out_file
-	if (argv[argc - 1][0] != '/')
-		args->out_file = ft_strjoin((char const *)ft_get_last_token(get_env_var(envp, "PWD"), '/'), argv[argc - 1]);
-	else
+	// if (argv[argc - 1][0] != '/')
+	// 	args->out_file = ft_strjoin((char const *)ft_get_last_token(get_env_var(envp, "PWD"), '/'), argv[argc - 1]);
+	// else
 		args->out_file = ft_strdup(argv[argc - 1]);
 	args->envp_ptr = (char **)envp;
 	parse_test(args);
