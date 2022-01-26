@@ -11,7 +11,9 @@
 # include <stdio.h>
 
 # define ARGC_MIN 5
+//END OF REMOVE
 
+//STRUCTS
 typedef struct s_args
 {
 	char	*in_file;

@@ -5,7 +5,6 @@ void	pipex_redirect_in_file(t_args *args)
 	int	status;
 	int	fdin;
 
-	printf("in redirect_in_file, args->in_file = %s\n", args->in_file);
 	status = access(args->in_file, F_OK);
 	if (status)
 	{

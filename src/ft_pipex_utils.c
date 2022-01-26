@@ -91,3 +91,42 @@ void	ft_strcat_iter(char **array, char *to_cat)
 	}
 	return ;
 }
+
+void	parse_test(t_args *args)
+{
+	char	*buff;
+
+	buff = malloc(2);
+	buff[1] = 0;
+	if (args->cmds_count)
+		printf("args->cmds_count = %d\n", args->cmds_count);
+	else
+		printf("args->cmds_count has not yet been initialized\n");
+	if (args->in_file)
+		printf("args->in_file = %s\n", args->in_file);
+	else
+		printf("args->in_file has not yet been initialized\n");
+	if (args->out_file)
+		printf("args->out_file = %s\n", args->out_file);
+	else
+		printf("args->out_file has not yet been initialized\n");
+	if (args->pathv)
+		ft_print_split(args->pathv, "pathv");
+	else
+		printf("args->pathv has not yet been initialized\n");
+	if (args->envp_ptr)
+		ft_print_split(args->envp_ptr, "envp_ptr");
+	else
+		printf("args->envp_ptr has not yet been initialized\n");
+	if (args->cmds)
+	{
+		for (int i = 0; i < args->cmds_count; i++)
+		{
+			buff[0] = i + '0';
+			ft_print_split(args->cmds[i], buff);
+		}
+	}
+	else
+		printf("args->cmds has not yet been initialized\n");
+	free(buff);
+}

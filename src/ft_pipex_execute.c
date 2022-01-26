@@ -1,14 +1,5 @@
 #include "../incl/pipex.h"
 
-static int	execute_cmd_n(t_args *args, int cmd_index)
-{
-	int		i;
-	char	*cmd_path;
-	char	*cmd_ptr;
-
-	if (cmd_index == 0)
-		printf("exec_cmd_n: sort has entered the chat\n");
-	i = 0;
 	/**
 	 * The idea here is to take the first token of the current command's array of strings (i.e. the first string, the name of the command)
 	 * and try to match it to all the instances of the path vector.
@@ -24,12 +15,18 @@ static int	execute_cmd_n(t_args *args, int cmd_index)
 	 * 								--no?---> returns (-1)	//all paths are exhausted
 	 * 
 	 */
+static int	execute_cmd_n(t_args *args, int cmd_index)
+{
+	int		i;
+	char	*cmd_path;
+	char	*cmd_ptr;
+
+	i = 0;
 	cmd_ptr = ft_strdup(args->cmds[cmd_index][0]);
 	while (args->pathv[i])
 	{
 		cmd_path = ft_strjoin(args->pathv[i], cmd_ptr);
 		args->cmds[cmd_index][0] = cmd_path;
-		printf("exec_cmd_n: cmd_path = %s and args->cmds[cmd_index][0] = %s\n", cmd_path, args->cmds[cmd_index][0]);
 		execve(cmd_path, args->cmds[cmd_index], args->envp_ptr);
 		//This will only be reached if execve() fails
 		args->cmds[cmd_index][0] = cmd_ptr;
@@ -85,7 +82,6 @@ void	pipex_execute_cmd1(t_args *args)
 	int		status;
 	int		pipe_fds[2];
 
-	printf("reached exec_cmd1\n");
 	//Create the single pipe that will allow our two commands to communicate
 	pipe(pipe_fds);
 	pid_child = fork();
@@ -95,7 +91,6 @@ void	pipex_execute_cmd1(t_args *args)
 		dup2(pipe_fds[1], STDOUT_FILENO);
 		close(pipe_fds[1]);
 		execute_cmd_n(args, 0);
-		printf("cmd1 failed\n");
 	}
 	close(pipe_fds[1]);
 	pid_wait = waitpid(pid_child, &status, WUNTRACED);
@@ -124,10 +119,8 @@ void	pipex_execute_cmd2(t_args *args, int read_end_fd)
 		dup2(read_end_fd, STDIN_FILENO);
 		close(read_end_fd);
 		execute_cmd_n(args, 1);
-		printf("cmd2 failed\n");
 	}
 	close(read_end_fd);
 	pid_wait = waitpid(pid_child, &status, WUNTRACED);
-	printf("test(end of pipex_exec_cmd2)\n");
 	return ;
 }

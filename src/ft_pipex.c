@@ -23,17 +23,9 @@ int main(int argc, char const *argv[], char const *envp[])
 	//end of remove
 	argc_check(argc);
 	pipex_parse_args(&args, argc, argv, envp);
+	
 	pipex_redirect_in_file(&args);
 	pipex_execute_cmd1(&args);
-	// pipex_execute_cmds(args);
-	// pipex_redirect_out_file(args);
-	// pipex_cleanup(args);
-	// status = ft_exec(&rgs, 1);
-	if (args.in_file)
-		printf("args.in_file after memset= %s\n", args.in_file);
-	else
-		printf("args.in_file has not been set\n");
-	// access_test(args);
 	return (0);
 }
 
@@ -66,6 +58,6 @@ int main(int argc, char const *argv[], char const *envp[])
 
 /**
  * (25/01/22)
- * 1. [] Rewrite the code to have cmd1 && cmd2
+ * 1. [x] Rewrite the code to have cmd1 && cmd2
  * 	
  */
