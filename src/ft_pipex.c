@@ -11,14 +11,6 @@ static void	argc_check(int argc)
 	return ;
 }
 
-/**
- * @brief 
- * 
- * @param argc 
- * @param argv 
- * @param envp 
- * @return int 
- */
 int main(int argc, char const *argv[], char const *envp[])
 {
 	t_args	args;
