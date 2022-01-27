@@ -151,3 +151,14 @@ char	*ft_strjoin_n(size_t nb_strings, ...)
 	va_end(ap);
 	return (joined);
 }
+
+static void	argc_check(int argc)
+{
+	if (argc < ARGC_MIN)
+	{
+		write(2, "pipex: wrong # of args, pal.\n", ft_strlen("pipex: wrong # of args, pal.\n"));
+		//do some error handling ninja business
+		exit(2);
+	}
+	return ;
+}

@@ -1,19 +1,52 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 
+# include "../libft/libft.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <errno.h>
 # include <fcntl.h>
-# include "../libft/libft.h"
-
+# include <sys/wait.h>
 //TO REMOVE
 # include <stdio.h>
-
-# define ARGC_MIN 5
 //END OF REMOVE
 
+# define ARGC_MIN 5
+
+//TYPEDEFS
+typedef uint_fast8_t	t_status;
+//NOT SURE: I'm uncertain as to whether a uint8_t would be better
+
 //STRUCTS
+typedef struct s_file
+{
+	char		*filepath;
+	t_status	status;
+}	t_file;
+
+typedef struct s_cmd
+{
+	char *const	*envp;
+	char		**argv;
+	t_file		cmd_file;
+	int			in_fd;
+	int			out_fd;
+	size_t		cmd_index;
+}	t_cmd;
+
+typedef struct s_main_container
+{
+	t_file	*in_file;
+	t_file	*out_file;
+	char	**pathv;
+	//Should commands be stored as a single pointer or a 2D array?
+	//pointer	-->		 more risky
+	//array		-->	more leak-prone
+	t_cmd	*cmd1;
+	size_t	cmds_count;
+}	t_main_container;
+
+// TO REMOVE
 typedef struct s_args
 {
 	char	*in_file;
@@ -23,6 +56,7 @@ typedef struct s_args
 	char	***cmds;
 	int		cmds_count;
 }	t_args;
+// END OF REMOVE
 
 //UTILS
 //Ultimately to be moved to libft submodule
@@ -33,21 +67,12 @@ char	*ft_get_last_token(char *string, char delimiter);
 char	*ft_strjoin_n(size_t nb_strings, ...);
 
 //CLEANUP
-void	pipex_cleanup_args(t_args *args);
 
 //PARSING
-void	args_init(t_args *args);
-char	*find_file(char **pathv, char *filename);
-void	pipex_parse_args(t_args *args, int argc, char const **argv, char const **envp);
 
 //REDIRECTIONS
-void	pipex_redirect_in_file(t_args *args);
-void	pipex_redirect_out_file(t_args *args);
 
 //EXECUTION
-void	pipex_execute_cmds(t_args *args);
-void	pipex_execute_cmd1(t_args *args);
-void	pipex_execute_cmd2(t_args *args, int read_end_fd);
 
 //TEST FUNCTIONS -- TO REMOVE
 void	access_test(t_args *args);
