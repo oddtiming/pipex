@@ -130,3 +130,24 @@ void	parse_test(t_args *args)
 		printf("args->cmds has not yet been initialized\n");
 	free(buff);
 }
+
+#include <stdarg.h>
+
+char	*ft_strjoin_n(size_t nb_strings, ...)
+{
+	va_list	ap;
+	size_t	i;
+	char	*joined;
+
+	i = 0;
+	va_start(ap, nb_strings);
+	joined = ft_strdup(va_arg(ap, char *));
+	i++;
+	while (i < nb_strings)
+	{
+		joined = ft_strjoin_free(joined, va_arg(ap, char *));
+		i++;
+	}
+	va_end(ap);
+	return (joined);
+}

@@ -5,9 +5,30 @@ void	args_init(t_args *args)
 	ft_bzero((void *)args, sizeof(t_args));
 }
 
+char	*find_file(char **pathv, char *filename)
+{
+	char	*full_path;
+	int		status;
+	int		i;
+
+	i = 0;
+	if (!pathv || !filename)
+		return (NULL);
+	while (pathv[i])
+	{
+		full_path = ft_strjoin(pathv[i], filename);
+		status = access(full_path, F_OK);
+		if (!status)
+			break ;
+		free(full_path);
+		i++;
+	}
+	return (full_path);
+}
+
 void	pipex_parse_args(t_args *args, int argc, char const *argv[], char const *envp[])
 {
-	char	*path_full;
+	char	*env_path;
 	int		i;
 
 	//Since argv[0], argv[1], and argv[argc-1] are not commands
@@ -16,11 +37,11 @@ void	pipex_parse_args(t_args *args, int argc, char const *argv[], char const *en
 	//Set args->in_file
 	args->in_file = ft_strdup(argv[1]);
 	//Set args->pathv[] from $PATH in envp[], each path its own string in pathv[]
-	if ((path_full = get_env_var(envp, "PATH")) != NULL)
+	if ((env_path = get_env_var(envp, "PATH")) != NULL)
 	{
-		args->pathv = ft_split(path_full, ':');
+		args->pathv = ft_split(env_path, ':');
 		ft_strcat_iter(args->pathv, "/");
-		free(path_full);
+		free(env_path);
 	}
 	
 	//to remove:
