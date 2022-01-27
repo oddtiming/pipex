@@ -56,5 +56,5 @@ dkms.conf
 .git
 *.swp
 .vscode
-./*.txt
+*.txt
 pipex
