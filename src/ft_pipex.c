@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:20 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/01/27 22:48:49 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/01/28 15:51:58 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@ int main(int argc, char const *argv[], char *envp[])
 	stat_main = parse_args(&container, argc, argv, envp);
 	// ERROR HANDLING
 
+//Should there also be init() here? What about redirect?
+//	I think there should. I think that embedding substructures is good, but clarity is best
+
 	//Important note: the I/O redirections will be handled in execute_cmds
+	//Could also be handled separately for a cleaner outcome.
 	stat_main = execute_cmds(&container.first_cmd, envp);
 	// ERROR HANDLING
 	

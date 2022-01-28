@@ -11,10 +11,9 @@ char	*get_env_var(char *const *envp, char *var_name)
 	char	*var_val;
 
 	i = 0;
-	if (var_name)
-		var_strlen = ft_strlen(var_name);
-	else
+	if (!var_name || !envp)
 		return (NULL);
+	var_strlen = ft_strlen(var_name);
 	while (envp[i])
 	{
 		if (!ft_strncmp(envp[i], var_name, var_strlen))

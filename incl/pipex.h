@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/01/28 01:02:43 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/01/28 15:44:13 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct s_cmd
 {
 	// char *const	*envp;
 	char		**cmd_argv;
-	t_file		cmd_filepath;
+	t_file		*cmd_filepath;
 	int			in_fd;
 	int			out_fd;
 	size_t		cmd_index;
