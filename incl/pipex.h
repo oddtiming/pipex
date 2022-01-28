@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/01/27 22:46:11 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/01/28 00:30:09 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,21 @@
 # define E_PIPE		1 << 3
 # define E_ACCFAIL	1 << 4
 
+bitfield (int = 32)
+	//Type
+	E_MALLOC : 1; 
+	E_ENVPATH
+	E_SPLIT
+	E_PIPE
+	E_ACCFAIL
+	
+	//Function
+	E_PARSECMD
+	E_PARSEPATH	
+	
+	//Parameter
+	//this would be t_err
+//
 //TYPEDEFS
 typedef uint_fast8_t	t_access;
 typedef uint8_t			t_status;
@@ -109,6 +124,10 @@ t_status	init_file(t_file *file_struct, char *filepath);
 
 //EXECUTION
 t_status	execute_cmds(t_cmd *first_cmd, char *const *envp);
+
+//ERROR HANDLING
+void	exit_on_err(t_status stat);
+void	print_err_msg(t_status stat);
 
 //CLEANUP
 t_status	cleanup(t_main_container *container);

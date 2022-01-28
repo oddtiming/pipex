@@ -169,3 +169,14 @@ void	argc_check(int argc)
 	}
 	return ;
 }
+
+//returns the index position of the last set bit of a number
+int	bit_i(int bin)
+{
+	int i;
+
+	i = 0;
+	while (bin >> i)
+		i++;
+	return(i);
+}
