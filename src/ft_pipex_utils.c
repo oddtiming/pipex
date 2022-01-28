@@ -3,7 +3,7 @@
 
 //This fct needs reviewing, I do not like how it handles memory allocation and its potential failure.
 //See Notion page for more details
-char	*get_env_var(char const *envp[], char *var_name)
+char	*get_env_var(char *const *envp, char *var_name)
 {
 	int		var_strlen;
 	int		envp_strlen;
@@ -13,6 +13,8 @@ char	*get_env_var(char const *envp[], char *var_name)
 	i = 0;
 	if (var_name)
 		var_strlen = ft_strlen(var_name);
+	else
+		return (NULL);
 	while (envp[i])
 	{
 		if (!ft_strncmp(envp[i], var_name, var_strlen))
@@ -24,9 +26,8 @@ char	*get_env_var(char const *envp[], char *var_name)
 		}
 		i++;
 	}
-	//allocate heap memory in case of failure to make sure that the return value can be freed
-	var_val = malloc(1);
-	return (var_val);
+	//Will only be reached if var_name is not found
+	return (NULL);
 }
 
 /**
@@ -79,14 +80,20 @@ void	ft_print_split(char **split_arr, char *name)
 }
 
 //NOTE: ft_strcat_iter assumes that the array is populated by malloced strings
-void	ft_strcat_iter(char **array, char *to_cat)
+void	ft_strcat_iter(char **vector, char *to_cat)
 {
 	int	i;
 
 	i = 0;
-	while (array && array[i])
+	while (vector && vector[i])
 	{
-		array[i] = ft_strjoin_free(array[i], to_cat);
+		vector[i] = ft_strjoin_free(vector[i], to_cat);
+		if (!vector[i])
+		{
+			ft_free_split(vector);
+			*vector = NULL;
+			return ;
+		}
 		i++;
 	}
 	return ;
@@ -152,13 +159,13 @@ char	*ft_strjoin_n(size_t nb_strings, ...)
 	return (joined);
 }
 
-static void	argc_check(int argc)
+void	argc_check(int argc)
 {
-	if (argc < ARGC_MIN)
+	if (argc < _ARGC_MIN)
 	{
 		write(2, "pipex: wrong # of args, pal.\n", ft_strlen("pipex: wrong # of args, pal.\n"));
-		//do some error handling ninja business
-		exit(2);
+		//ERROR HANDLING
+		exit(EXIT_FAILURE);
 	}
 	return ;
 }

@@ -11,24 +11,30 @@
 # include <stdio.h>
 //END OF REMOVE
 
-# define ARGC_MIN 5
+//DEFINES
+# define _ARGC_MIN 5
+# define E_MALLOC	1 << 0
+# define E_ENVPATH	1 << 1
+# define E_SPLIT	1 << 2
+# define E_PIPE		1 << 3
 
 //TYPEDEFS
-typedef uint_fast8_t	t_status;
+typedef uint_fast8_t	t_access;
+typedef uint8_t			t_status;
 //NOT SURE: I'm uncertain as to whether a uint8_t would be better
 
 //STRUCTS
 typedef struct s_file
 {
 	char		*filepath;
-	t_status	status;
+	t_access	access_flags;
 }	t_file;
 
 typedef struct s_cmd
 {
-	char *const	*envp;
-	char		**argv;
-	t_file		cmd_file;
+	// char *const	*envp;
+	char		**cmd_argv;
+	t_file		cmd_filepath;
 	int			in_fd;
 	int			out_fd;
 	size_t		cmd_index;
@@ -36,14 +42,14 @@ typedef struct s_cmd
 
 typedef struct s_main_container
 {
-	t_file	*in_file;
-	t_file	*out_file;
-	char	**pathv;
+	t_file	*in_file;	//Needs to be freed
+	t_file	*out_file;	//Needs to be freed
+	char	**pathv;	//Needs to be ft_split_freed
 	//Should commands be stored as a single pointer or a 2D array?
-	//pointer	-->		 more risky
-	//array		-->	more leak-prone
-	t_cmd	*cmd1;
-	size_t	cmds_count;
+	//pointer	-->	harder arithmetic, less chances of deprecating
+	//array		-->	more intuitive, but more leak-prone
+	t_cmd	*first_cmd;		//Who the fuck knows what it needs
+	size_t	nb_cmds;	//simply give it a value
 }	t_main_container;
 
 // TO REMOVE
@@ -58,21 +64,41 @@ typedef struct s_args
 }	t_args;
 // END OF REMOVE
 
+//ENUMS
+typedef enum	s_fflags
+{
+	F_EXISTS	= 1 << 0,
+	F_CANREAD	= 1 << 1,
+	F_CANWRITE	= 1 << 2,
+	F_CANEXEC	= 1 << 3
+}	t_fflags;
+
+
 //UTILS
 //Ultimately to be moved to libft submodule
-char	*get_env_var(char const *envp[], char *var_name);
+char	*get_env_var(char *const *envp, char *var_name);
 void	ft_print_split(char **split_arr, char *name);
 void	ft_strcat_iter(char **vector, char *to_cat);
 char	*ft_get_last_token(char *string, char delimiter);
-char	*ft_strjoin_n(size_t nb_strings, ...);
+char	*ft_strjoin_n(size_t nb_strings, ...);	//NEEDS STDARG LIB
 
-//CLEANUP
+//Pipex-specific:
+void	argc_check(int argc);
 
 //PARSING
+t_status	parse_args(t_main_container *container, int argc, char **argv, char *const *envp);
+t_status	parse_pathv(char ***pathv, char *const *envp);
+t_status	parse_cmds(t_cmd *first_cmd, char **argv, size_t nb_cmds);
+t_status	init_container(t_main_container *container);
+t_status	init_file(t_file *file_struct, char *filepath);
 
 //REDIRECTIONS
 
 //EXECUTION
+t_status	execute_cmds(t_cmd *first_cmd, char *const *envp);
+
+//CLEANUP
+t_status	cleanup(t_main_container *container);
 
 //TEST FUNCTIONS -- TO REMOVE
 void	access_test(t_args *args);
