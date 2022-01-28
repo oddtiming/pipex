@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/27 22:46:00 by iyahoui-          #+#    #+#             */
+/*   Updated: 2022/01/27 22:46:03 by iyahoui-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incl/pipex.h"
 
 
@@ -5,23 +17,27 @@ t_status	parse_args(t_main_container *container, int argc, char **argv, char *co
 {
 	t_status	stat_parse;
 
-	//DO NOT MOVE THIS STEP
-	container->nb_cmds = argc - 3;	//Since redirections account for args += 2, and argv[0] is the program name
-	
+	container->nb_cmds = argc - 3;	//2 for files + 1 for argv[0]
 	stat_parse = init_container(&container);
-	// ERROR HANDLING
+	if (stat_parse)
+		return (stat_parse);
 
 	stat_parse = init_file(container->in_file, argv[1]);
-	// ERROR HANDLING
+	if (stat_parse)
+		return (stat_parse);
 	
 	stat_parse = init_file(container->out_file, argv[argc - 1]);
-	// ERROR HANDLING
+	if (stat_parse)
+		return (stat_parse);
 	
 	stat_parse = parse_pathv(&(container->pathv), envp);
-	// ERROR HANDLING
+	if (stat_parse)
+		return (stat_parse);
 
 	stat_parse = parse_cmds(container->first_cmd, argv, container->nb_cmds);
-	// ERROR HANDLING
+	if (stat_parse)
+		return (stat_parse);
+
 	return (stat_parse);
 }
 
@@ -48,28 +64,26 @@ t_status	parse_cmds(t_cmd *first_cmd, char **argv, size_t nb_cmds)
 	size_t	i;
 	int		*pipe_fds;
 
-	//We need n - 1 pipes, since both ends of the3 pipe chain have I/O redirection 
+	i = 0;
+	//We need n - 1 pipes, b/c both ends of the line of cmds have I/O redir
 	pipe_fds = malloc(2 * (nb_cmds - 1) * sizeof(int));
-	i = 0;
-	//Could easily be condensed
-	while (i < (nb_cmds - 1))
-	{
-		if ( pipe( pipe_fds + (2*i) ) );
-			return(E_PIPE);
-		i++;
-	}
-	i = 0;
 	while (i < nb_cmds)
 	{
 		cmd_i = first_cmd + i;
 		cmd_i->cmd_index = i;
+		//pipe() will not be called if !(first_condition)
+		if ( i < (nb_cmds - 1) && pipe( pipe_fds + (2*i) ) );
+			return(E_PIPE);
 		cmd_i->cmd_argv = ft_split(argv[2 + i], ' ');
 		if (!(cmd_i->cmd_argv[0]))
 			return (E_SPLIT);
+		//first_cmd has in_file's fd
 		if (i > 0)
-			cmd_i->in_fd = *(pipe_fds + i + 1);
+			cmd_i->in_fd = *(pipe_fds + 2*i);
+		//last_cmd has out_file's fd
 		if (i < nb_cmds - 1)
-			cmd_i->out_fd = *(pipe_fds + i + 1);
+			cmd_i->out_fd = *(pipe_fds + 2*i + 1);
+		i++;
 	}
 	free (pipe_fds);
 	return (0);

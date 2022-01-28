@@ -1,41 +1,47 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   inits.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/27 22:46:34 by iyahoui-          #+#    #+#             */
+/*   Updated: 2022/01/27 22:46:36 by iyahoui-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incl/pipex.h"
 
 t_status	init_container(t_main_container *container)
 {
-	t_status	stat_ctr_init;
-
-	stat_ctr_init = 0;
 	container->in_file = malloc(sizeof(t_file));
-	//ERROR HANDLING
+	if (!container->in_file)
+		return (E_MALLOC);
 	container->out_file = malloc(sizeof(t_file));
-	//ERROR HANDLING
+	if (!container->out_file)
+		return (E_MALLOC);
 	container->pathv = malloc(sizeof(char **));
-	//ERROR HANDLING
+	if (!container->pathv)
+		return (E_MALLOC);
 	container->first_cmd = malloc(container->nb_cmds * sizeof(t_cmd));
+	if (!container->first_cmd)
+		return (E_MALLOC);
 
 	ft_bzero((void *) container, sizeof(t_main_container));
-	
-	return (stat_ctr_init);
 }
 
 t_status	init_file(t_file *file_struct, char *filepath)
 {
-	t_status	stat_file;
-	
-	stat_file = 0;
-	file_struct = malloc(sizeof(t_file));
-	//ERROR HANDLING
 	file_struct->filepath = ft_strdup(filepath);
 	if (!file_struct->filepath)
-		stat_file = E_MALLOC;
-	//ERROR HANDLING
-	
-	if (!access(filepath, F_OK))
-		file_struct->access_flags |= F_EXISTS;
-	if (!access(filepath, R_OK))
-		file_struct->access_flags |= F_CANREAD;
-	if (!access(filepath, W_OK))
-		file_struct->access_flags |= F_CANWRITE;
-	if (!access(filepath, X_OK))
-		file_struct->access_flags |= F_CANEXEC;
+		return (E_MALLOC);
+
+	file_struct->access_flags |= (!access(filepath, F_OK)) << 0;
+	if (errno)
+		return (E_ACCFAIL);
+	file_struct->access_flags |= (!access(filepath, R_OK)) << 1;
+	file_struct->access_flags |= (!access(filepath, W_OK)) << 2;
+	file_struct->access_flags |= (!access(filepath, X_OK)) << 3;
+
+	return (0);
 }

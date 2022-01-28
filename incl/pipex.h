@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
+/*   Updated: 2022/01/27 22:46:11 by iyahoui-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PIPEX_H
 # define PIPEX_H
 
@@ -17,6 +29,7 @@
 # define E_ENVPATH	1 << 1
 # define E_SPLIT	1 << 2
 # define E_PIPE		1 << 3
+# define E_ACCFAIL	1 << 4
 
 //TYPEDEFS
 typedef uint_fast8_t	t_access;

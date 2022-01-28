@@ -3,6 +3,14 @@
 #include <unistd.h>
 #include <errno.h>
 
+typedef enum	s_fflags
+{
+	F_EXISTS	= 1 << 0,
+	F_CANREAD	= 1 << 1,
+	F_CANWRITE	= 1 << 2,
+	F_CANEXEC	= 1 << 3
+}	t_fflags;
+
 char	*get_env_var(char *envp[], char *var_name)
 {
 	int	var_strlen;
@@ -53,7 +61,7 @@ char	*ft_get_last_token(char *string, char delimiter)
 
 int	main(int argc, char *argv[], char *envp[])
 {
-//	int		infile_fd;
+	int		infile_fd;
 	int		status;
 	char	*shell_version;
 	char	*buff;
@@ -69,6 +77,15 @@ int	main(int argc, char *argv[], char *envp[])
 	printf("errno = %d\n", errno);
 	printf("shell = %s\n", shell_version);
 	perror(shell_version);
+
+	int		flag		= 0;
+	char	*filepath	= "enum_test.c";
+	flag |= (!access(filepath, F_OK)) << 0;
+	flag |= (!access(filepath, R_OK)) << 1;
+	flag |= (!access(filepath, W_OK)) << 2;
+	flag |= (!access(filepath, X_OK)) << 3;
+	printf("flag = %d\n", flag);
+	
 	free(shell_version);
 	return (0);
 }

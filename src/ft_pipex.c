@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_pipex.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/27 22:46:20 by iyahoui-          #+#    #+#             */
+/*   Updated: 2022/01/27 22:48:49 by iyahoui-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incl/pipex.h"
 
 int main(int argc, char const *argv[], char *envp[])
@@ -9,7 +21,7 @@ int main(int argc, char const *argv[], char *envp[])
 	// if (parse_args(container, argc, argv))
 	// 	error_handling("parse_args", container);
 	argc_check(argc);
-	container.nb_cmds = 0;		//the rest of the struct will be bzeroed in init_container()
+	container.nb_cmds = 0;		//only to prevent fuckery with mallocing of pipe_fds
 	stat_main = parse_args(&container, argc, argv, envp);
 	// ERROR HANDLING
 
@@ -39,9 +51,9 @@ int main(int argc, char const *argv[], char *envp[])
  * }	t_fflags;
  * 	flag |= (F_EXISTS & (access(file, F_OK) ^ 0x1)<<(F_EXISTS - 1))
  * 	
- * 			For that, I need to run some tests to see how members of an enum are accessed, b/c I could run them
- * 			in a loop until I reach the end of the enum, with a very neat 1:1 relationship btw a flag's position
- * 			and the amount of bits by which it needs to be shifted (from 0x1)
+ * 			For that, I need to run some tests to see how members of an enum are accessed, b/c 
+ * 			I could run them in a loop until I reach the end of the enum, with a very neat 
+ * 			1:1 relationship btw a flag's position and the amount of bits by which it needs to be shifted (from 0x1)
  * 			c
  * 
  */
