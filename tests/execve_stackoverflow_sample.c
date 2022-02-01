@@ -1,9 +1,11 @@
 #include <unistd.h>
 #include <stdio.h>
 
+extern char **environ;
+
 int main(int argc, char *argv[], char *envp[])
 {
-    char *exec_argv[] = { "/usr/bin/env", 0 };
+    char *exec_argv[] = { "/bin/bash", "-c", "cd tests", 0 };
     char *exec_envp[] =
     {
         "HOME=/",
@@ -14,7 +16,7 @@ int main(int argc, char *argv[], char *envp[])
         0
     };
 
-    execve(exec_argv[0], &exec_argv[0], envp);
+    execve(exec_argv[0], &exec_argv[0], environ);
     fprintf(stderr, "Oops!\n");
     return -1;
 }

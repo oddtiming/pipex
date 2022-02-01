@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/01/28 15:44:13 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/01/31 20:11:38 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,27 +29,27 @@
 # define E_ENVPATH	1 << 1
 # define E_SPLIT	1 << 2
 # define E_PIPE		1 << 3
-# define E_ACCFAIL	1 << 4
+# define E_ACCESS	1 << 4
 
 // bitfield (int = 32)
-// 	//Type
+// 	typedef union{
+	// is_set : 1
+	// }
 // 	E_MALLOC : 1; 
 // 	E_ENVPATH
 // 	E_SPLIT
 // 	E_PIPE
-// 	E_ACCFAIL
-	
+// 	E_ACCESS
 // 	//Function
 // 	E_PARSECMD
 // 	E_PARSEPATH	
-	
 // 	//Parameter
 // 	//this would be t_err
 //
 //TYPEDEFS
-typedef uint_fast8_t	t_access;
-typedef uint8_t			t_status;
-//NOT SURE: I'm uncertain as to whether a uint8_t would be better
+typedef uint_fast8_t	t_uf8;
+typedef t_uf8			t_access;
+typedef t_uf8			t_error;
 
 //STRUCTS
 typedef struct s_file
@@ -61,24 +61,23 @@ typedef struct s_file
 typedef struct s_cmd
 {
 	// char *const	*envp;
-	char		**cmd_argv;
-	t_file		*cmd_filepath;
-	int			in_fd;
-	int			out_fd;
-	size_t		cmd_index;
+	char		**cmd_argv;		//Needs to be ft_split_freed
+	int			in_fd;	
+	int			out_fd;	
+	t_access	access_flags;	//Needs to be freed
 }	t_cmd;
 
 typedef struct s_main_container
 {
-	t_file	*in_file;	//Needs to be freed
-	t_file	*out_file;	//Needs to be freed
-	char	**pathv;	//Needs to be ft_split_freed
 	//Should commands be stored as a single pointer or a 2D array?
 	//pointer	-->	harder arithmetic, less chances of deprecating
 	//array		-->	more intuitive, but more leak-prone
-	t_cmd	*first_cmd;		//Who the fuck knows what it needs
-	size_t	nb_cmds;	//simply give it a value
-}	t_main_container;
+	t_cmd	*first_cmd;	//Who the fuck knows what it needs
+	t_file	*in_file;	//Needs to be freed
+	t_file	*out_file;	//Needs to be freed
+	char	**pathv;	//Needs to be ft_split_freed
+	size_t	nb_cmds;	//simply assign it a value
+}	t_main_cont;
 
 // TO REMOVE
 typedef struct s_args
@@ -111,26 +110,31 @@ char	*ft_get_last_token(char *string, char delimiter);
 char	*ft_strjoin_n(size_t nb_strings, ...);	//NEEDS STDARG LIB
 
 //Pipex-specific:
-void	argc_check(int argc);
+void	check_argc(int argc);
+t_error	get_file_mode(char *filepath);
+
+//INIT
+t_error	init(t_main_cont *container, char **argv, int argc);
+t_error	init_container(t_main_cont *container, int nb_cmds);
+t_error	init_cmds(t_cmd *first_cmd, char **argv, size_t nb_cmds);
 
 //PARSING
-t_status	parse_args(t_main_container *container, int argc, char **argv, char *const *envp);
-t_status	parse_pathv(char ***pathv, char *const *envp);
-t_status	parse_cmds(t_cmd *first_cmd, char **argv, size_t nb_cmds);
-t_status	init_container(t_main_container *container);
-t_status	init_file(t_file *file_struct, char *filepath);
+t_error	parse(t_main_cont *container, int argc, char **argv, char *const *envp);
+t_error	parse_pathv(char ***pathv, char *const *envp);
+t_error	parse_file(t_file *file_struct, char *filepath);
+void	find_cmd(t_cmd *cmd_i, char **pathv);
 
 //REDIRECTIONS
 
 //EXECUTION
-t_status	execute_cmds(t_cmd *first_cmd, char *const *envp);
+t_error	execute(t_cmd *first_cmd, char *const *envp);
 
 //ERROR HANDLING
-void	exit_on_err(t_status stat);
-void	print_err_msg(t_status stat);
+void	exit_on_err(t_error stat);
+void	print_err_msg(t_error stat);
 
 //CLEANUP
-t_status	cleanup(t_main_container *container);
+t_error	cleanup(t_main_cont *container);
 
 //TEST FUNCTIONS -- TO REMOVE
 void	access_test(t_args *args);

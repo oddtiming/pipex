@@ -1,22 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   inits.c                                            :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:34 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/01/28 15:35:46 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/01/31 20:12:25 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/pipex.h"
 
-t_status	init_container(t_main_container *container)
+t_error	init(t_main_cont *container, char **argv, int argc)
+{
+	t_error	init_status;
+
+	init_status = init_container(container, argc - 3); //2 for files + 1 for argv[0]
+	if (init_status)
+		return (init_status);
+	init_status = init_cmds(container->first_cmd, argv, container->nb_cmds);
+	if (init_status)
+		return (init_status);
+	return (0);
+}
+
+t_error	init_container(t_main_cont *container, int nb_cmds)
 {
 	container->in_file = malloc(sizeof(t_file));
 	if (!container->in_file)
 		return (E_MALLOC);
+	ft_bzero((void *) container, sizeof(t_main_cont));
+	container->nb_cmds = nb_cmds;
 	container->out_file = malloc(sizeof(t_file));
 	if (!container->out_file)
 		return (E_MALLOC);
@@ -27,21 +42,28 @@ t_status	init_container(t_main_container *container)
 	if (!container->first_cmd)
 		return (E_MALLOC);
 
-	ft_bzero((void *) container, sizeof(t_main_container));
+	return (0);
 }
 
-t_status	init_file(t_file *file_struct, char *filepath)
+t_error	init_cmds(t_cmd *first_cmd, char **argv, size_t nb_cmds)
 {
-	file_struct->filepath = ft_strdup(filepath);
-	if (!file_struct->filepath)
-		return (E_MALLOC);
+	t_cmd	*cmd_i;
+	size_t	i;
+	int		pipe_fds[2];
 
-	file_struct->access_flags |= (!access(filepath, F_OK)) << 0;
-	if (errno)
-		return (E_ACCFAIL);
-	file_struct->access_flags |= (!access(filepath, R_OK)) << 1;
-	file_struct->access_flags |= (!access(filepath, W_OK)) << 2;
-	file_struct->access_flags |= (!access(filepath, X_OK)) << 3;
-
+	i = 0;
+	while (i < nb_cmds)
+	{
+		cmd_i = first_cmd + i;
+		if ( i < (nb_cmds - 1) && pipe( pipe_fds + (2*i) ) )
+			return(E_PIPE);
+		//First command will have its in_fd redirected from in_file
+		if (i > 0)
+			cmd_i->in_fd = *(pipe_fds + 2*i);
+		//Last command will have its out_fd redirected from out_file
+		if (i < nb_cmds - 1)
+			cmd_i->out_fd = *(pipe_fds + 2*i + 1);
+		i++;
+	}
 	return (0);
 }
