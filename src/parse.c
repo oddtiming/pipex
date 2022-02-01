@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:00 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/01/31 20:21:34 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/01 18:13:54 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_error	parse_pathv(char ***pathv, char *const *envp)
  */
 t_error	parse_file(t_file *file_struct, char *filepath)
 {
-	file_struct->filepath = ft_strdup(filepath);
+	file_struct->filepath = strdup(filepath);
 	if (!file_struct->filepath)
 		return (E_MALLOC);
 

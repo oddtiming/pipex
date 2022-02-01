@@ -100,38 +100,43 @@ void	ft_strcat_iter(char **vector, char *to_cat)
 	return ;
 }
 
-void	parse_test(t_args *args)
+void	parse_test(t_main_cont *cont)
 {
 	char	*buff;
 
 	buff = malloc(2);
 	buff[1] = 0;
-	if (args->cmds_count)
-		printf("args->cmds_count = %d\n", args->cmds_count);
+	if (cont->nb_cmds)
+		printf("args->cmds_count = %zu\n", cont->nb_cmds);
 	else
 		printf("args->cmds_count has not yet been initialized\n");
-	if (args->in_file)
-		printf("args->in_file = %s\n", args->in_file);
+	if (cont->in_file)
+	{
+		printf("args->in_file->filepath = %s\n", cont->in_file->filepath);
+		printf("cont->in_file->access_flags = %d\n", cont->in_file->access_flags);
+	}
 	else
 		printf("args->in_file has not yet been initialized\n");
-	if (args->out_file)
-		printf("args->out_file = %s\n", args->out_file);
+	if (cont->out_file)
+	{
+		printf("args->out_file->filepath = %s\n", cont->out_file->filepath);
+		printf("cont->out_file->access_flags = %d\n", cont->out_file->access_flags);
+	}
 	else
 		printf("args->out_file has not yet been initialized\n");
-	if (args->pathv)
-		ft_print_split(args->pathv, "pathv");
+	if (cont->pathv)
+		ft_print_split(cont->pathv, "pathv");
 	else
 		printf("args->pathv has not yet been initialized\n");
-	if (args->envp_ptr)
-		ft_print_split(args->envp_ptr, "envp_ptr");
-	else
-		printf("args->envp_ptr has not yet been initialized\n");
-	if (args->cmds)
+	if (cont->first_cmd)
 	{
-		for (int i = 0; i < args->cmds_count; i++)
+		for (int i = 0; i < cont->nb_cmds; i++)
 		{
 			buff[0] = i + '0';
-			ft_print_split(args->cmds[i], buff);
+			ft_print_split(cont->first_cmd[i].cmd_argv, buff);
+			printf("cont->first_cmd[%d].in_fd: %d\n", i, cont->first_cmd[i].in_fd);
+			printf("cont->first_cmd[%d].out_fd: %d\n", i, cont->first_cmd[i].out_fd);
+			printf("cont->first_cmd[%d].access_flags: %d\n", i, cont->first_cmd[i].access_flags);
 		}
 	}
 	else
@@ -183,7 +188,7 @@ int	bit_i(int bin)
 	return(i);
 }
 
-t_error	get_file_mode(char *filepath)
+t_access	get_file_mode(char *filepath)
 {
 	t_access	access_status;
 

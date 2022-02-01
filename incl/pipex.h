@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/01/31 23:39:13 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/01 18:02:08 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <sys/wait.h>
 //TO REMOVE
 # include <stdio.h>
+# include <string.h>
 //END OF REMOVE
 
 //DEFINES
@@ -56,9 +57,6 @@ typedef struct s_cmd
 
 typedef struct s_main_container
 {
-	//Should commands be stored as a single pointer or a 2D array?
-	//pointer	-->	harder arithmetic, less chances of deprecating
-	//array		-->	more intuitive, but more leak-prone
 	t_cmd	*first_cmd;	//Who the fuck knows what it needs
 	t_file	*in_file;	//Needs to be freed
 	t_file	*out_file;	//Needs to be freed
@@ -66,17 +64,6 @@ typedef struct s_main_container
 	size_t	nb_cmds;	//simply assign it a value
 }	t_main_cont;
 
-// TO REMOVE
-typedef struct s_args
-{
-	char	*in_file;
-	char	*out_file;
-	char	**pathv;
-	char	**envp_ptr;
-	char	***cmds;
-	int		cmds_count;
-}	t_args;
-// END OF REMOVE
 
 //ENUMS
 typedef enum	s_fflags
@@ -101,14 +88,15 @@ void	check_argc(int argc);
 t_error	get_file_mode(char *filepath);
 
 //INIT
-t_error	init(t_main_cont *container, char **argv, int argc);
+t_error	init(t_main_cont *container, int argc);
 t_error	init_container(t_main_cont *container, int nb_cmds);
-t_error	init_cmds(t_cmd *first_cmd, char **argv, size_t nb_cmds);
+t_error	init_cmds(t_cmd *first_cmd, size_t nb_cmds);
 
 //PARSING
 t_error	parse(t_main_cont *container, int argc, char **argv, char *const *envp);
 t_error	parse_pathv(char ***pathv, char *const *envp);
 t_error	parse_file(t_file *file_struct, char *filepath);
+t_error	parse_cmds(t_main_cont *cont, char **argv);
 void	find_cmd(t_cmd *cmd_i, char **pathv);
 
 //REDIRECTIONS
@@ -123,9 +111,8 @@ void	print_err_msg(t_error stat);
 //CLEANUP
 t_error	cleanup(t_main_cont *container);
 
-//TEST FUNCTIONS -- TO REMOVE
-void	access_test(t_args *args);
-void	parse_test(t_args *args);
+//TO REMOVE
+void	parse_test(t_main_cont *cont);
 //END OF REMOVE
 
 #endif

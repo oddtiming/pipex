@@ -6,33 +6,43 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:20 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/01/31 19:10:41 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/01 18:37:58 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/pipex.h"
 
-int main(int argc, char *argv[], char *const envp[])
+int main(int argc, char **argv, char **envp)
 {
 	t_main_cont	container;	//main container declared on the stack
 	t_error			stat_main;
 
+	
 	//check_argc will exit(EXIT_FAILURE) on error;
 	check_argc(argc);
+	ft_bzero((void *)&container, sizeof(t_main_cont));
 	
-	stat_main = init(&container, argc, argv);
+	parse_test(&container);
+	
+	stat_main = init(&container, argc);
 	// ERROR HANDLING
+	
+	printf("\n***** parse_test after init() *****\n");
+	parse_test(&container);
 	
 	stat_main = parse(&container, argc, argv, envp);
+
+	printf("\n***** parse_test after parse() *****\n");
+	parse_test(&container);
 	// ERROR HANDLING
 
-	stat_main = redirect_in_file(container.first_cmd, container.in_file);
+	// stat_main = redirect_in_file(container.first_cmd, container.in_file);
 	// ERROR HANDLING
 
-	stat_main = execute(container.first_cmd, envp);
+	// stat_main = execute(container.first_cmd, envp);
 	// ERROR HANDLING
 
-	stat_main = cleanup(&container);
+	// stat_main = cleanup(&container);
 	// ERROR HANDLING
 	
 	return (0);
