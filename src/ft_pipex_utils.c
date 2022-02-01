@@ -78,7 +78,9 @@ void	ft_print_split(char **split_arr, char *name)
 	return ;
 }
 
-//NOTE: ft_strcat_iter assumes that the array is populated by malloced strings
+//ft_strcat_iter() assumes that the vector is populated by malloced strings
+//If the vector has not been malloced, a free() error will occur
+//if the vector is NULL, nothing will happen
 void	ft_strcat_iter(char **vector, char *to_cat)
 {
 	int	i;
@@ -158,11 +160,12 @@ char	*ft_strjoin_n(size_t nb_strings, ...)
 	return (joined);
 }
 
-void	argc_check(int argc)
+void	check_argc(int argc)
 {
 	if (argc < _ARGC_MIN)
 	{
-		write(2, "pipex: wrong # of args, pal.\n", ft_strlen("pipex: wrong # of args, pal.\n"));
+		write(2, "pipex: we about to have an argument on arguments... Imma need at least 4 args\n", \
+			sizeof("pipex: we about to have an argument on arguments... Imma need at least 4 args\n"));
 		//ERROR HANDLING
 		exit(EXIT_FAILURE);
 	}
@@ -178,4 +181,18 @@ int	bit_i(int bin)
 	while (bin >> i)
 		i++;
 	return(i);
+}
+
+t_error	get_file_mode(char *filepath)
+{
+	t_access	access_status;
+
+	access_status |= (!access(filepath, F_OK)) << 0;
+	if (errno)
+		return (0);
+	access_status |= (!access(filepath, R_OK)) << 1;
+	access_status |= (!access(filepath, W_OK)) << 2;
+	access_status |= (!access(filepath, X_OK)) << 3;
+	
+	return (access_status);
 }

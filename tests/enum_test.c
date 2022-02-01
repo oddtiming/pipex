@@ -29,4 +29,9 @@ int	main(void)
 	printf("t_fflags file_flags = %lu\n", sizeof(t_fflags));
 	printf("!access(filepath1, F_OK)) = %d\n", !access(filepath1, F_OK));
 	printf("!access(filepath2, F_OK)) = %d\n", !access(filepath2, F_OK));
+	printf("file_flags + 1 == %d\n", file_flags + 1);
+	printf("file_flags + 2 == %d\n", file_flags + 2);
+	printf("file_flags + 3 == %d\n", file_flags + 3);
+	//So after a bit of digging, I realize now that what I was trying to achieve is impossible
+	//An enum in c is nothing more than a way to enumerate a bunch of constants
 }
