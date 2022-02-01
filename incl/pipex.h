@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/01/31 20:11:38 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/01/31 23:39:13 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,12 @@
 # define E_PIPE		1 << 3
 # define E_ACCESS	1 << 4
 
-// bitfield (int = 32)
-// 	typedef union{
-	// is_set : 1
-	// }
-// 	E_MALLOC : 1; 
-// 	E_ENVPATH
-// 	E_SPLIT
-// 	E_PIPE
-// 	E_ACCESS
-// 	//Function
-// 	E_PARSECMD
-// 	E_PARSEPATH	
-// 	//Parameter
-// 	//this would be t_err
-//
 //TYPEDEFS
 typedef uint_fast8_t	t_uf8;
 typedef t_uf8			t_access;
 typedef t_uf8			t_error;
+
+
 
 //STRUCTS
 typedef struct s_file
