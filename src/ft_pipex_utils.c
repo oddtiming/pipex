@@ -137,6 +137,10 @@ void	parse_test(t_main_cont *cont)
 			printf("cont->first_cmd[%d].in_fd: %d\n", i, cont->first_cmd[i].in_fd);
 			printf("cont->first_cmd[%d].out_fd: %d\n", i, cont->first_cmd[i].out_fd);
 			printf("cont->first_cmd[%d].access_flags: %d\n", i, cont->first_cmd[i].access_flags);
+			if (cont->first_cmd[i].cmd_argv)
+				printf("cont->first_cmd[%d].cmd_argv[0] = %s\n", i, *(cont->first_cmd[i].cmd_argv));
+			else
+				printf("cont->first_cmd[%d].cmd_argv has not been initialized?\n", i);
 		}
 	}
 	else
@@ -193,7 +197,7 @@ t_access	get_file_mode(char *filepath)
 	t_access	access_status;
 
 	access_status |= (!access(filepath, F_OK)) << 0;
-	if (errno)
+	if (!access_status)
 		return (0);
 	access_status |= (!access(filepath, R_OK)) << 1;
 	access_status |= (!access(filepath, W_OK)) << 2;

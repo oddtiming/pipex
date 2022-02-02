@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:00 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/01 18:13:54 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/01 19:33:41 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,20 @@ t_error	parse(t_main_cont *container, int argc, char **argv, char *const *envp)
 	t_uf8	i;
 
 	parse_status = parse_file(container->in_file, argv[1]);
-	if (parse_status)
-		return (parse_status);
+	// if (parse_status)
+	// 	return (parse_status);
 		
 	parse_status = parse_file(container->out_file, argv[argc - 1]);
-	if (parse_status)
-		return (parse_status);
+	// if (parse_status)
+	// 	return (parse_status);
 		
 	parse_status = parse_pathv(&container->pathv, envp);
-	if (parse_status)
-		return (parse_status);
+	// // if (parse_status)
+	// 	return (parse_status);
 		
 	parse_status = parse_cmds(container, argv);
-	if (parse_status)
-		return (parse_status);
+	// if (parse_status)
+	// 	return (parse_status);
 
 	return (parse_status);
 }
@@ -80,7 +80,7 @@ t_error	parse_pathv(char ***pathv, char *const *envp)
  */
 t_error	parse_file(t_file *file_struct, char *filepath)
 {
-	file_struct->filepath = strdup(filepath);
+	file_struct->filepath = ft_strdup(filepath);
 	if (!file_struct->filepath)
 		return (E_MALLOC);
 
@@ -100,10 +100,16 @@ void	find_cmd(t_cmd *cmd_i, char **pathv)
 	while (pathv[i])
 	{
 		temp_path = ft_strjoin(pathv[i], cmd_i->cmd_argv[0]);
+		printf("temp_path at pathv[%zu] = '%s'\n", i, temp_path);
 		cmd_i->access_flags = get_file_mode(temp_path);
-		if (cmd_i->access_flags > 0)
+		printf("get_file_mode(temp_path) : %d\n", get_file_mode(temp_path));
+		if (cmd_i->access_flags)
+		{
+			printf("WE MADE IT FOR CMD_I!!!!!!!\n");
+			printf("temp_path = '%s'\n", temp_path);
 			break;
-		free(temp_path);
+		}
+		// free(temp_path);
 		i++;
 	}
 	if (cmd_i->access_flags)

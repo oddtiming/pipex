@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:20 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/01 18:37:58 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/01 19:37:51 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,34 @@
 int main(int argc, char **argv, char **envp)
 {
 	t_main_cont	container;	//main container declared on the stack
-	t_error			stat_main;
+	t_error		main_status;
 
-	
+	printf("get_file_mode(\"/usr/bin/sort\") : %d\n", get_file_mode("/usr/bin/sort"));
+	printf("get_file_mode(\"/usr/bin/uniq\") : %d\n", get_file_mode("/usr/bin/uniq"));
+	printf("!access(/usr/bin/uniq, F_OK) : %d\n", !access("/usr/bin/sort", F_OK));
+	printf("!access(/usr/bin/uniq, F_OK) : %d\n", !access("/usr/bin/uniq", F_OK));
 	//check_argc will exit(EXIT_FAILURE) on error;
 	check_argc(argc);
-	ft_bzero((void *)&container, sizeof(t_main_cont));
 	
-	parse_test(&container);
-	
-	stat_main = init(&container, argc);
+	main_status = init(&container, argc);
 	// ERROR HANDLING
 	
-	printf("\n***** parse_test after init() *****\n");
-	parse_test(&container);
+	// printf("\n***** parse_test after init() *****\n");
+	// parse_test(&container);
 	
-	stat_main = parse(&container, argc, argv, envp);
+	main_status = parse(&container, argc, argv, envp);
 
 	printf("\n***** parse_test after parse() *****\n");
 	parse_test(&container);
 	// ERROR HANDLING
 
-	// stat_main = redirect_in_file(container.first_cmd, container.in_file);
+	// main_status = redirect_in_file(container.first_cmd, container.in_file);
 	// ERROR HANDLING
 
-	// stat_main = execute(container.first_cmd, envp);
+	// main_status = execute(container.first_cmd, envp);
 	// ERROR HANDLING
 
-	// stat_main = cleanup(&container);
+	// main_status = cleanup(&container);
 	// ERROR HANDLING
 	
 	return (0);
