@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/01 18:02:08 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/06 01:21:06 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,13 @@
 //END OF REMOVE
 
 //DEFINES
-# define _ARGC_MIN 5
+# define _ARGC_MIN	5
 # define E_MALLOC	1 << 0
 # define E_ENVPATH	1 << 1
 # define E_SPLIT	1 << 2
 # define E_PIPE		1 << 3
 # define E_ACCESS	1 << 4
+# define HERE_DOC	1 << 10
 
 //TYPEDEFS
 typedef uint_fast8_t	t_uf8;

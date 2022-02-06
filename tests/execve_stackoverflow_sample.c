@@ -1,6 +1,9 @@
 #include <unistd.h>
 #include <stdio.h>
 
+execve(cmd)
+exit(1);
+
 extern char **environ;
 
 int main(int argc, char *argv[], char *envp[])
