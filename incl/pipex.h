@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/06 01:21:06 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/06 21:14:31 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@
 //END OF REMOVE
 
 //DEFINES
+# define HEREDOC	"here_doc"
 # define _ARGC_MIN	5
 # define E_MALLOC	1 << 0
 # define E_ENVPATH	1 << 1
 # define E_SPLIT	1 << 2
 # define E_PIPE		1 << 3
 # define E_ACCESS	1 << 4
-# define HERE_DOC	1 << 10
 
 //TYPEDEFS
 typedef uint_fast8_t	t_uf8;
@@ -53,12 +53,13 @@ typedef struct s_cmd
 	char		**cmd_argv;		//Needs to be ft_split_freed
 	int			in_fd;	
 	int			out_fd;	
-	t_access	access_flags;	//Needs to be freed
+	t_access	access_flags;
+	t_error		cmd_stat;
 }	t_cmd;
 
 typedef struct s_main_container
 {
-	t_cmd	*first_cmd;	//Who the fuck knows what it needs
+	t_cmd	*first_cmd;	//argvs need to be freed. Only first_cmd needs to be freed
 	t_file	*in_file;	//Needs to be freed
 	t_file	*out_file;	//Needs to be freed
 	char	**pathv;	//Needs to be ft_split_freed
@@ -98,19 +99,25 @@ t_error	parse(t_main_cont *container, int argc, char **argv, char *const *envp);
 t_error	parse_pathv(char ***pathv, char *const *envp);
 t_error	parse_file(t_file *file_struct, char *filepath);
 t_error	parse_cmds(t_main_cont *cont, char **argv);
-void	find_cmd(t_cmd *cmd_i, char **pathv);
+t_error	find_cmd(t_cmd *cmd_i, char **pathv);
 
 //REDIRECTIONS
+t_error	redirect_in_file(t_main_cont *cont);
+t_error	redirect_out_file(t_main_cont *cont);
+t_error	redirect(t_main_cont *cont);
 
 //EXECUTION
-t_error	execute(t_cmd *first_cmd, char *const *envp);
+void	execute(t_main_cont *cont, char *const *envp);
 
 //ERROR HANDLING
 void	exit_on_err(t_error stat);
 void	print_err_msg(t_error stat);
 
 //CLEANUP
-t_error	cleanup(t_main_cont *container);
+void	cleanup(t_main_cont *container);
+
+//BONUS
+void	read_heredoc(char *delimiter);
 
 //TO REMOVE
 void	parse_test(t_main_cont *cont);

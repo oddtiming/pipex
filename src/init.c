@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:34 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/01 18:34:56 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/06 02:50:34 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@ t_error	init_container(t_main_cont *container, int nb_cmds)
 		return (E_MALLOC);
 	container->nb_cmds = nb_cmds;
 	container->out_file = malloc(sizeof(t_file));
-	container->pathv = malloc(sizeof(char **));
+	if (!container->out_file)
+		return (E_MALLOC);
 	container->first_cmd = malloc(container->nb_cmds * sizeof(t_cmd));
-	if (!container->out_file || !container->pathv || !container->first_cmd)
+	if (!container->first_cmd)
 		return (E_MALLOC);
 
 	return (0);
@@ -50,7 +51,7 @@ t_error	init_cmds(t_cmd *first_cmd, size_t nb_cmds)
 		return (E_PIPE);
 	first_cmd->out_fd = pipe_fds[1];
 	i = 1;
-	while (i < nb_cmds)
+	while (i < nb_cmds - 1)
 	{
 		cmd_i = first_cmd + i;
 		cmd_i->in_fd = pipe_fds[0];
