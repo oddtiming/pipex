@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:00 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/01 19:33:41 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/06 02:52:52 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	find_cmd(t_cmd *cmd_i, char **pathv)
 			printf("temp_path = '%s'\n", temp_path);
 			break;
 		}
-		// free(temp_path);
+		free(temp_path);
 		i++;
 	}
 	if (cmd_i->access_flags)

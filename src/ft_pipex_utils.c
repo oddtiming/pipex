@@ -196,6 +196,7 @@ t_access	get_file_mode(char *filepath)
 {
 	t_access	access_status;
 
+	access_status = 0;
 	access_status |= (!access(filepath, F_OK)) << 0;
 	if (!access_status)
 		return (0);
