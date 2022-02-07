@@ -5,18 +5,14 @@ int main(int argc, char **argv, char **envp)
 	t_main_cont	container;	//main container declared on the stack
 	t_error		main_status;
 
-	printf("get_file_mode(\"/usr/bin/sort\") : %d\n", get_file_mode("/usr/bin/sort"));
-	printf("get_file_mode(\"/usr/bin/uniq\") : %d\n", get_file_mode("/usr/bin/uniq"));
-	printf("get_file_mode(\"a.out\") : %d\n", get_file_mode("a.out"));
-	printf("!access(/usr/bin/uniq, F_OK) : %d\n", !access("/usr/bin/sort", F_OK));
-	printf("!access(/usr/bin/uniq, F_OK) : %d\n", !access("/usr/bin/uniq", F_OK));
 	//check_argc will exit(EXIT_FAILURE) on error;
 	check_argc(argc);
 	if (!strncmp(argv[1], HEREDOC, sizeof(HEREDOC)))
 	{
-		read_heredoc("EOF");
-		container.in_file->filepath = ft_strdup(HEREDOC);
+		read_heredoc(argv[2]);
+		// container.in_file->filepath = ft_strdup(HEREDOC);
 	}
+	// return (0);
 	main_status = init(&container, argc);
 	// ERROR HANDLING
 	
@@ -25,14 +21,14 @@ int main(int argc, char **argv, char **envp)
 	
 	main_status = parse(&container, argc, argv, envp);
 
-	printf("\n***** parse_test after parse() *****\n");
+	// ERROR HANDLING
+
+	main_status = redirect(&container);
+	// ERROR HANDLING
+	printf("\n***** parse_test after redirect() *****\n");
 	parse_test(&container);
-	// ERROR HANDLING
 
-	// main_status = redirect_in_file(container.first_cmd, container.in_file);
-	// ERROR HANDLING
-
-	// main_status = execute(container.first_cmd, envp);
+	execute(&container, envp);
 	// ERROR HANDLING
 
 	// container.in_file->filepath = HEREDOC;

@@ -1,5 +1,8 @@
 #include "../incl/pipex.h"
+<<<<<<< HEAD
 #include "get_next_line.h"
+=======
+>>>>>>> ef6dd6201264f006a88f0f681d97019b4524f05e
 
 void	read_heredoc(char *delimiter)
 {
@@ -24,6 +27,10 @@ void	read_heredoc(char *delimiter)
 		if (buffer)
 			free (buffer);
 	}
+<<<<<<< HEAD
+=======
+	perror("here_doc finished");
+>>>>>>> ef6dd6201264f006a88f0f681d97019b4524f05e
 	free (buffer);
 	close(heredoc_fd);
 	return ;

@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/06 03:00:30 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/07 13:39:12 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,12 @@ t_error	parse(t_main_cont *container, int argc, char **argv, char *const *envp);
 t_error	parse_pathv(char ***pathv, char *const *envp);
 t_error	parse_file(t_file *file_struct, char *filepath);
 t_error	parse_cmds(t_main_cont *cont, char **argv);
-void	find_cmd(t_cmd *cmd_i, char **pathv);
+t_error	find_cmd(t_cmd *cmd_i, char **pathv);
 
 //REDIRECTIONS
+t_error	redirect_in_file(t_main_cont *cont);
+t_error	redirect_out_file(t_main_cont *cont);
+t_error	redirect(t_main_cont *cont);
 
 //EXECUTION
 void	execute(t_main_cont *cont, char *const *envp);
