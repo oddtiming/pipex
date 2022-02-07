@@ -15,7 +15,10 @@ static void	execute_cmds(char *const *envp, t_cmd *cmd_i, size_t nb_cmds)
 	if (pid == 0)
 	{
 		dup2(cmd_i->out_fd, STDOUT_FILENO);
+<<<<<<< HEAD
 		printf("entered exec_cmd with cmd_i.filepath == %s\n", cmd_i->cmd_argv[0]);
+=======
+>>>>>>> 7ba697171833e22c3976c5283d88b7f09a2ee692
 		execve(cmd_i->cmd_argv[0], cmd_i->cmd_argv, envp);
 		exit (0);
 	}
