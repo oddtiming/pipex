@@ -7,35 +7,33 @@ int main(int argc, char **argv, char **envp)
 
 	//check_argc will exit(EXIT_FAILURE) on error;
 	check_argc(argc);
-	if (!strncmp(argv[1], HEREDOC, sizeof(HEREDOC)))
+	ft_memset(&container, 0, sizeof(container));
+	main_status = 0;
+	if (!strncmp(argv[1], "here_doc", sizeof("here_doc")))
 	{
-		read_heredoc(argv[2]);
+		heredoc(argv[2]);
+		main_status = init(&container, argc - 1);
 		// container.in_file->filepath = ft_strdup(HEREDOC);
 	}
-	// return (0);
-	main_status = init(&container, argc);
-	// ERROR HANDLING
-	
-	// printf("\n***** parse_test after init() *****\n");
-	// parse_test(&container);
-	
+	else
+		main_status = init(&container, argc);
+	if (main_status)
+		pipex_error(main_status);
 	main_status = parse(&container, argc, argv, envp);
-
-	// ERROR HANDLING
-
+	if (main_status && main_status <= E_PIPE)
+		pipex_error(main_status);
 	main_status = redirect(&container);
-	// ERROR HANDLING
-	printf("\n***** parse_test after redirect() *****\n");
-	parse_test(&container);
-
 	execute(&container, envp);
+	cleanup(&container);
+	return (0);
+
 	// ERROR HANDLING
 
 	// container.in_file->filepath = HEREDOC;
-	cleanup(&container);
 	// ERROR HANDLING
+	// printf("\n***** parse_test after redirect() *****\n");
+	// parse_test(&container);
 	
-	return (0);
 }
 /**
  * @brief To set flags, we can do a little sum'n like:

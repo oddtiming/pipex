@@ -34,13 +34,8 @@ void	close_fds(t_main_cont *cont)
 	int	i;
 
 	i = 0;
-<<<<<<< HEAD
-	// if (!ft_strncmp(cont->in_file->filepath, HEREDOC, 8))
-		unlink("./here_doc");	//DOES NOT WORK
-=======
-	if (!ft_strncmp(cont->in_file->filepath, HEREDOC, 8))
-		unlink("./here_doc");
->>>>>>> ef6dd6201264f006a88f0f681d97019b4524f05e
+	if (!ft_strncmp(cont->in_file->filepath, HEREDOC, sizeof(HEREDOC)))
+		unlink(HEREDOC);
 	while (i < cont->nb_cmds)
 	{
 		close(cont->first_cmd[i].in_fd);

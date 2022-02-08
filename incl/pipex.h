@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/07 13:39:12 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/08 01:24:01 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@
 # define HEREDOC	"here_doc"
 # define _ARGC_MIN	5
 # define E_MALLOC	1 << 0
-# define E_ENVPATH	1 << 1
-# define E_SPLIT	1 << 2
-# define E_PIPE		1 << 3
-# define E_ACCESS	1 << 4
+# define E_SPLIT	1 << 1
+# define E_PIPE		1 << 2
+# define E_ENVPATH	1 << 3
+# define E_NOCMD	1 << 4
+# define E_NOEXEC	1 << 5
 
 //TYPEDEFS
 typedef uint_fast8_t	t_uf8;
@@ -110,14 +111,15 @@ t_error	redirect(t_main_cont *cont);
 void	execute(t_main_cont *cont, char *const *envp);
 
 //ERROR HANDLING
-void	exit_on_err(t_error stat);
-void	print_err_msg(t_error stat);
+void	pipex_error(t_error err);
+void	file_error(t_file *file);
+void	cmd_error(t_cmd *cmd_i);
 
 //CLEANUP
 void	cleanup(t_main_cont *container);
 
 //BONUS
-void	read_heredoc(char *delimiter);
+void	heredoc(char *delimiter);
 
 //TO REMOVE
 void	parse_test(t_main_cont *cont);

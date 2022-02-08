@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:00 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/07 13:40:07 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/08 01:35:24 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,17 @@ t_error	parse(t_main_cont *container, int argc, char **argv, char *const *envp)
 	t_error	parse_status;
 	t_uf8	i;
 
+	// if (!ft_strncmp(argv[1], "here_doc", sizeof(sizeof("here_doc"))))
+	// 	parse_status = parse_file(container->in_file, HEREDOC);
+	// else
 	parse_status = parse_file(container->in_file, argv[1]);
 	if (parse_status & E_MALLOC)
 	{
 		printf("Error in parse after in_file = %d\n", parse_status);
 		return (E_MALLOC);
 	}
+
 	parse_status = parse_file(container->out_file, argv[argc - 1]);
-	
 	if (parse_status & E_MALLOC)
 	{
 		printf("Error in parse after out_file = %d\n", parse_status);
@@ -37,7 +40,7 @@ t_error	parse(t_main_cont *container, int argc, char **argv, char *const *envp)
 		printf("Error in parse after pathv = %d\n", parse_status);
 		return (parse_status);
 	}
-	if (!ft_strncmp(argv[1], HEREDOC, 8))		
+	if (!ft_strncmp(container->in_file->filepath, HEREDOC, sizeof(HEREDOC)))
 		parse_status = parse_cmds(container, argv + 1);
 	else 
 		parse_status = parse_cmds(container, argv);
@@ -54,6 +57,7 @@ t_error	parse_cmds(t_main_cont *cont, char **argv)
 {
 	t_cmd	*cmd_i;
 	t_uf8	i;
+	int		status;
 
 	i = 0;
 	while (i < cont->nb_cmds)
@@ -62,8 +66,13 @@ t_error	parse_cmds(t_main_cont *cont, char **argv)
 		cmd_i->cmd_argv = ft_split(argv[2 + i], ' ');
 		if (!(cmd_i->cmd_argv[0]))
 			return (E_SPLIT);
-		if (find_cmd(cmd_i, cont->pathv) == E_MALLOC)
+		status = find_cmd(cmd_i, cont->pathv);
+		if (status == E_MALLOC)
 			return (E_MALLOC);
+		if (cmd_i->access_flags == 0)
+			cmd_i->cmd_stat = E_NOCMD;
+		else if (!(cmd_i->access_flags & F_CANEXEC))
+			cmd_i->cmd_stat = E_NOEXEC;
 		i++;	
 	}
 	return (0);
@@ -100,9 +109,6 @@ t_error	parse_file(t_file *file_struct, char *filepath)
 		return (E_MALLOC);
 
 	file_struct->access_flags = get_file_mode(filepath);
-	if (!file_struct->access_flags)
-		return (E_ACCESS);
-
 	return (0);
 }
 
@@ -115,7 +121,7 @@ t_error	find_cmd(t_cmd *cmd_i, char **pathv)
 	if (is_set(cmd_i->cmd_argv[0][0], ".~/"))
 	{
 		cmd_i->access_flags = get_file_mode(cmd_i->cmd_argv[0]);
-		return ;
+		return (0);
 	}
 	i = 0;
 	while (pathv[i])

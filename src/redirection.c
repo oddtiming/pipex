@@ -5,6 +5,8 @@ t_error	redirect_in_file(t_main_cont *cont)
 	int	fd;
 
 	fd = open(cont->in_file->filepath, O_RDONLY);
+	if (fd < 0)
+		file_error(cont->in_file);
 	cont->first_cmd->in_fd = fd;
 	return (0);
 }
@@ -19,10 +21,10 @@ t_error	redirect_out_file(t_main_cont *cont)
 		fd = open(file, O_TRUNC | O_CREAT | O_WRONLY | O_CLOEXEC, 0644);
 	else
 	{
-		if (cont->out_file->access_flags & F_OK)
+		if (cont->out_file->access_flags & F_EXISTS)
 			fd = open(file, O_APPEND | O_WRONLY);
 		else
-			fd = open(file, O_CREAT | O_EXCL | O_APPEND | O_WRONLY, 0644);
+			fd = open(file, O_CREAT | O_APPEND | O_WRONLY, 0644);
 	}
 	cont->first_cmd[cont->nb_cmds - 1].out_fd = fd;
 	return (0);
