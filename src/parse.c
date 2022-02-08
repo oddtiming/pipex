@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:00 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/08 01:35:24 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/08 16:09:28 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,39 +17,21 @@ t_error	parse(t_main_cont *container, int argc, char **argv, char *const *envp)
 	t_error	parse_status;
 	t_uf8	i;
 
-	// if (!ft_strncmp(argv[1], "here_doc", sizeof(sizeof("here_doc"))))
-	// 	parse_status = parse_file(container->in_file, HEREDOC);
-	// else
-	parse_status = parse_file(container->in_file, argv[1]);
+	parse_status |= parse_file(container->in_file, argv[1]);
 	if (parse_status & E_MALLOC)
-	{
-		printf("Error in parse after in_file = %d\n", parse_status);
 		return (E_MALLOC);
-	}
-
-	parse_status = parse_file(container->out_file, argv[argc - 1]);
+	parse_status |= parse_file(container->out_file, argv[argc - 1]);
 	if (parse_status & E_MALLOC)
-	{
-		printf("Error in parse after out_file = %d\n", parse_status);
 		return (E_MALLOC);
-	}
-		
-	parse_status = parse_pathv(&container->pathv, envp);
+	parse_status |= parse_pathv(&container->pathv, envp);
 	if (parse_status & (E_MALLOC | E_SPLIT))
-	{
-		printf("Error in parse after pathv = %d\n", parse_status);
 		return (parse_status);
-	}
 	if (!ft_strncmp(container->in_file->filepath, HEREDOC, sizeof(HEREDOC)))
-		parse_status = parse_cmds(container, argv + 1);
-	else 
-		parse_status = parse_cmds(container, argv);
+		parse_status |= parse_cmds(container, argv + 1);
+	else
+		parse_status |= parse_cmds(container, argv);
 	if (parse_status & (E_MALLOC | E_SPLIT))
-	{
-		printf("Error in parse after parse_cmds = %d\n", parse_status);
 		return (parse_status);
-	}
-
 	return (parse_status);
 }
 
@@ -73,14 +55,14 @@ t_error	parse_cmds(t_main_cont *cont, char **argv)
 			cmd_i->cmd_stat = E_NOCMD;
 		else if (!(cmd_i->access_flags & F_CANEXEC))
 			cmd_i->cmd_stat = E_NOEXEC;
-		i++;	
+		i++;
 	}
-	return (0);
+	return (cmd_i->cmd_stat);
 }
 
 t_error	parse_pathv(char ***pathv, char *const *envp)
 {
-	char		*envp_path;
+	char	*envp_path;
 
 	envp_path = get_env_var(envp, "PATH");
 	if (!envp_path)
@@ -107,7 +89,6 @@ t_error	parse_file(t_file *file_struct, char *filepath)
 	file_struct->filepath = ft_strdup(filepath);
 	if (!file_struct->filepath)
 		return (E_MALLOC);
-
 	file_struct->access_flags = get_file_mode(filepath);
 	return (0);
 }
@@ -116,9 +97,8 @@ t_error	find_cmd(t_cmd *cmd_i, char **pathv)
 {
 	size_t	i;
 	char	*temp_path;
-	
-	//First check whether the command was given a path
-	if (is_set(cmd_i->cmd_argv[0][0], ".~/"))
+
+	if (!pathv || is_set(cmd_i->cmd_argv[0][0], ".~/"))
 	{
 		cmd_i->access_flags = get_file_mode(cmd_i->cmd_argv[0]);
 		return (0);
@@ -131,14 +111,13 @@ t_error	find_cmd(t_cmd *cmd_i, char **pathv)
 			return (E_MALLOC);
 		cmd_i->access_flags = get_file_mode(temp_path);
 		if (cmd_i->access_flags)
-			break;
+		{
+			free (cmd_i->cmd_argv[0]);
+			cmd_i->cmd_argv[0] = temp_path;
+			return (0);
+		}
 		free(temp_path);
 		i++;
-	}
-	if (cmd_i->access_flags)
-	{
-		free (cmd_i->cmd_argv[0]);
-		cmd_i->cmd_argv[0] = temp_path;
 	}
 	return (0);
 }

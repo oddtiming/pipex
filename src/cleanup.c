@@ -3,7 +3,7 @@
 static void	free_main_cont(t_main_cont *cont)
 {
 	int	i;
-	
+
 	if (cont->pathv)
 		ft_free_split(cont->pathv);
 	if (cont->in_file && cont->in_file->filepath)

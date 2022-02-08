@@ -1,8 +1,7 @@
-//Note: everything in this file should be given its own .c file in the libft submodule
 #include "../incl/pipex.h"
 
-//This fct needs reviewing, I do not like how it handles memory allocation and its potential failure.
-//See Notion page for more details
+//This fct needs reviewing, I do not like how it handles memory 
+//allocation and its potential failure. See Notion page for more details.
 char	*get_env_var(char *const *envp, char *var_name)
 {
 	int		var_strlen;
@@ -20,23 +19,24 @@ char	*get_env_var(char *const *envp, char *var_name)
 		{
 			envp_strlen = ft_strlen(envp[i]);
 			var_val = malloc(envp_strlen - var_strlen);
-			var_val = ft_strncpy(var_val, (char *)envp[i] + var_strlen + 1, envp_strlen - var_strlen);
+			var_val = ft_strncpy(var_val, (char *)envp[i] + var_strlen + 1, \
+				envp_strlen - var_strlen);
 			return (var_val);
 		}
 		i++;
 	}
-	//Will only be reached if var_name is not found
 	return (NULL);
 }
 
 /**
- * @brief This function returns a malloced substring of the last token as delimited by param delimiter from
- * 	param string.
+ * @brief This function returns a malloced substring of the last token as
+ * delimited by param delimiter from param string.
  * 
- * @param string	//The original string.
- * @param delimiter	//What separates each token in the string.
- * @return char*	//Malloced string of the last token. If no delimiter, a copy of the string will be returned.
- * 					//In case of error, NULL is returned.
+ * @param string	The original string.
+ * @param delimiter	What separates each token in the string.
+ * @return char*	Malloced string of the last token. 
+ * 					- If no delimiter, a copy of the string will be returned.
+ * 					- In case of error, NULL is returned.
  */
 char	*ft_get_last_token(char *string, char delimiter)
 {
@@ -74,7 +74,7 @@ void	ft_print_split(char **split_arr, char *name)
 		printf("{%s} split_arr[%d] = \"%s\"\n", name, i, split_arr[i]);
 		i++;
 	}
-	printf("{%s} Is it null-terminated: split_arr[%d] = %s\n", name, i, split_arr[i]);
+	printf("{%s} null-terminated ?: %s\n", name, split_arr[i]);
 	return ;
 }
 
@@ -86,7 +86,7 @@ void	ft_strcat_iter(char **vector, char *to_cat)
 	int	i;
 
 	i = 0;
-	while (vector && vector[i])
+	while (vector && to_cat && vector[i])
 	{
 		vector[i] = ft_strjoin_free(vector[i], to_cat);
 		if (!vector[i])
@@ -169,27 +169,17 @@ char	*ft_strjoin_n(size_t nb_strings, ...)
 	return (joined);
 }
 
-void	check_argc(int argc)
+void	check_args(int argc, char **argv)
 {
-	if (argc < _ARGC_MIN)
+	if (argc < _ARGC_MIN || \
+			(!ft_strncmp(argv[1], "here_doc", sizeof("here_doc")) && \
+			argc < _ARGC_MIN + 1))
 	{
-		write(2, "pipex: we about to have an argument on arguments... Imma need at least 4 args\n", \
-			sizeof("pipex: we about to have an argument on arguments... Imma need at least 4 args\n"));
-		//ERROR HANDLING
+		write(2, "pipex: Imma need at least 4 args\n", \
+			sizeof("pipex: Imma need at least 4 args\n"));
 		exit(EXIT_FAILURE);
 	}
 	return ;
-}
-
-//returns the index position of the last set bit of a number
-int	bit_i(int bin)
-{
-	int i;
-
-	i = 0;
-	while (bin >> i)
-		i++;
-	return(i);
 }
 
 t_access	get_file_mode(char *filepath)
@@ -202,7 +192,6 @@ t_access	get_file_mode(char *filepath)
 		return (0);
 	access_status |= (!access(filepath, R_OK)) << 1;
 	access_status |= (!access(filepath, W_OK)) << 2;
-	access_status |= (!access(filepath, X_OK)) << 3;
-	
+	access_status |= (!access(filepath, X_OK)) << 3;	
 	return (access_status);
 }

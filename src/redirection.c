@@ -1,6 +1,6 @@
 #include "../incl/pipex.h"
 
-t_error	redirect_in_file(t_main_cont *cont)
+void	redirect_in_file(t_main_cont *cont)
 {
 	int	fd;
 
@@ -8,10 +8,10 @@ t_error	redirect_in_file(t_main_cont *cont)
 	if (fd < 0)
 		file_error(cont->in_file);
 	cont->first_cmd->in_fd = fd;
-	return (0);
+	return ;
 }
 
-t_error	redirect_out_file(t_main_cont *cont)
+void	redirect_out_file(t_main_cont *cont)
 {
 	int		fd;
 	char	*file;
@@ -27,16 +27,12 @@ t_error	redirect_out_file(t_main_cont *cont)
 			fd = open(file, O_CREAT | O_APPEND | O_WRONLY, 0644);
 	}
 	cont->first_cmd[cont->nb_cmds - 1].out_fd = fd;
-	return (0);
+	return ;
 }
 
-t_error	redirect(t_main_cont *cont)
+void	redirect(t_main_cont *cont)
 {
-	t_error	status;
-
-	status = redirect_in_file(cont);
-
-	status = redirect_out_file(cont);
-
-	return (status);
+	redirect_in_file(cont);
+	redirect_out_file(cont);
+	return ;
 }

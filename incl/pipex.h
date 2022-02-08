@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/08 01:24:01 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/08 15:19:40 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char	*ft_get_last_token(char *string, char delimiter);
 char	*ft_strjoin_n(size_t nb_strings, ...);	//NEEDS STDARG LIB
 
 //Pipex-specific:
-void	check_argc(int argc);
+void	check_args(int argc, char **argv);
 t_error	get_file_mode(char *filepath);
 
 //INIT
@@ -103,9 +103,9 @@ t_error	parse_cmds(t_main_cont *cont, char **argv);
 t_error	find_cmd(t_cmd *cmd_i, char **pathv);
 
 //REDIRECTIONS
-t_error	redirect_in_file(t_main_cont *cont);
-t_error	redirect_out_file(t_main_cont *cont);
-t_error	redirect(t_main_cont *cont);
+void	redirect_in_file(t_main_cont *cont);
+void	redirect_out_file(t_main_cont *cont);
+void	redirect(t_main_cont *cont);
 
 //EXECUTION
 void	execute(t_main_cont *cont, char *const *envp);
@@ -119,7 +119,7 @@ void	cmd_error(t_cmd *cmd_i);
 void	cleanup(t_main_cont *container);
 
 //BONUS
-void	heredoc(char *delimiter);
+t_error	heredoc(t_main_cont *cont, int argc, char *delimiter);
 
 //TO REMOVE
 void	parse_test(t_main_cont *cont);
