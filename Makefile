@@ -39,7 +39,7 @@ AR		=	ar
 
 ARFLAGS	=	rcs
 
-RM_OBJS		=	rm -rf $(OBJ_DIR)
+RM_OBJS		=	rm -rf $(OBJ_DIR) && make clean -sC ./libft
 RM_OBJS_OUT	=	$$($(RM_OBJS) 2>&1 | sed -e 's/error/\\\033[0;31merror\\\033[0m/g' -e 's/warning/\\\033[0;33mwarning\\\033[0m/g')
 RM_PROG		=	rm -f $(NAME)
 RM_PROG_OUT	=	$$($(RM_PROG) 2>&1 | sed -e 's/error/\\\033[0;31merror\\\033[0m/g' -e 's/warning/\\\033[0;33mwarning\\\033[0m/g')
@@ -84,4 +84,4 @@ re:	fclean all
 
 bonus:	all
 
-.PHONY: all clean fclean re bonus libft
+.PHONY: all clean fclean re bonus libft silent_libft
