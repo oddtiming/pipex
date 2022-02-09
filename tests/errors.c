@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 23:21:25 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/06 01:19:53 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/08 16:39:31 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ typedef struct s_errstruct
 {
 	union
 	{
-		t_uf8	e_malloc : 1;
-		t_uf8	e_envpath : 1;
-		t_uf8	e_split : 1;
-		t_uf8	e_pipe : 1;
-		t_uf8	e_access : 1;
+		int	e_malloc : 1;
+		int	e_envpath : 1;
+		int	e_split : 1;
+		int	e_pipe : 1;
+		int	e_access : 1;
 	};
-	t_uf8	all;
+	int	all;
 } t_errstruct;
 
 // void	exit_on_err(t_error stat)
@@ -60,9 +60,9 @@ typedef struct s_errstruct
 // void	print_err_msg(t_error stat)
 // {
 // 	t_error	err;
-// 	t_uf8	*err_ptr;
+// 	int	*err_ptr;
 
-// 	err_ptr = (t_uf8 *)(&err);
+// 	err_ptr = (int *)(&err);
 // 	err_ptr.t_errtype.e_malloc = 1;
 // 	printf("err_ptr.t_errtype.e_malloc = %d\n", err_ptr.t_errtype.e_malloc)
 // 	(void) (stat & E_MALLOC) strerror(errv[bctod(E_MALLOC)]));

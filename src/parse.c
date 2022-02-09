@@ -6,17 +6,17 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:00 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/08 16:09:28 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/08 20:09:13 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incl/pipex.h"
+#include "pipex.h"
 
 t_error	parse(t_main_cont *container, int argc, char **argv, char *const *envp)
 {
 	t_error	parse_status;
-	t_uf8	i;
 
+	parse_status = 0;
 	parse_status |= parse_file(container->in_file, argv[1]);
 	if (parse_status & E_MALLOC)
 		return (E_MALLOC);
@@ -38,7 +38,7 @@ t_error	parse(t_main_cont *container, int argc, char **argv, char *const *envp)
 t_error	parse_cmds(t_main_cont *cont, char **argv)
 {
 	t_cmd	*cmd_i;
-	t_uf8	i;
+	int		i;
 	int		status;
 
 	i = 0;
@@ -95,7 +95,7 @@ t_error	parse_file(t_file *file_struct, char *filepath)
 
 t_error	find_cmd(t_cmd *cmd_i, char **pathv)
 {
-	size_t	i;
+	int		i;
 	char	*temp_path;
 
 	if (!pathv || is_set(cmd_i->cmd_argv[0][0], ".~/"))

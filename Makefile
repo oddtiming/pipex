@@ -1,13 +1,18 @@
 NAME	=	pipex
 
-CFILES	=	pipex.c \
-			parsing.c \
-			pipex_utils.c
+CFILES	=	cleanup.c \
+			errors.c \
+			execute.c \
+			heredoc.c \
+			init.c \
+			parse.c \
+			pipex.c \
+			pipex_utils.c \
+			redirection.c
 
 SRC_DIR	=	src
 
 SRCS	=	${addprefix ${SRC_DIR}/, ${CFILES}}
-#OBJS	=	${SRCS:.c=.o}
 
 OBJ_DIR	=	obj
 
@@ -25,10 +30,8 @@ ARFLAGS	=	rcs
 
 RM		=	rm -f
 
-#.c.o:
-#	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
-${OBJ_DIR}/%.o: ${SRC_DIR}/%.c ${H_DIR}/pipex.h
+${OBJ_DIR}/%.o:	${SRC_DIR}/%.c
 	@mkdir -p ${OBJ_DIR}
 	${CC} ${CFLAGS} -I${H_DIR} -o $@ -c $<
 
@@ -37,9 +40,8 @@ all:	${NAME}
 libft: 
 		${MAKE} bonus -C ./libft
 
-#NOTE : cd is relative in Makefile and will return to main root folder 
-
 ${NAME}:	libft ${OBJS}
+			${CC} ${CFLAGS} -lft -Llibft ${OBJS} -o ${NAME}
 
 clean:	
 	${RM} ${OBJS}
@@ -53,6 +55,3 @@ re:	fclean all
 bonus:	all
 
 .PHONY: all clean fclean re bonus libft
-
-#to add:
-#Directories for srcs and for .o

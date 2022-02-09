@@ -1,4 +1,16 @@
-#include "../incl/pipex.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/08 20:20:00 by iyahoui-          #+#    #+#             */
+/*   Updated: 2022/02/08 20:20:01 by iyahoui-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "pipex.h"
 
 static void	execute_child(char *const *envp, t_cmd *cmd_i)
 {
@@ -14,7 +26,7 @@ static void	execute_child(char *const *envp, t_cmd *cmd_i)
 	exit (EXIT_FAILURE);
 }
 
-static void	execute_cmds(char *const *envp, t_cmd *cmd_i)
+static int	execute_cmds(char *const *envp, t_cmd *cmd_i)
 {
 	int		status;
 	pid_t	pid;
@@ -27,14 +39,16 @@ static void	execute_cmds(char *const *envp, t_cmd *cmd_i)
 	close(cmd_i->out_fd);
 	status = 0;
 	waitpid(pid, &status, 0);
-	return ;
+	return (status);
 }
 
-void	execute(t_main_cont *cont, char *const *envp)
+int	execute(t_main_cont *cont, char *const *envp)
 {
+	int		status;
 	int		i;
 
 	i = 0;
+	status = 0;
 	while (i < cont->nb_cmds)
 	{
 		if (i == cont->nb_cmds - 1 && cont->first_cmd[i].out_fd < 0)
@@ -42,8 +56,8 @@ void	execute(t_main_cont *cont, char *const *envp)
 			file_error(cont->out_file);
 			break ;
 		}
-		execute_cmds(envp, &(cont->first_cmd[i]));
+		status = execute_cmds(envp, &(cont->first_cmd[i]));
 		i++;
 	}
-	return ;
+	return (status);
 }
