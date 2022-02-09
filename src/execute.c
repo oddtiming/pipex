@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 20:20:00 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/08 20:20:01 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/09 18:03:51 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	execute_child(char *const *envp, t_cmd *cmd_i)
 
 	status = 0;
 	dup2(cmd_i->out_fd, STDOUT_FILENO);
-	if (cmd_i->cmd_stat)
+	if (cmd_i->cmd_stat && cmd_i->in_fd > -1)
 		cmd_error(cmd_i);
 	if (cmd_i->cmd_stat || cmd_i->in_fd < 0)
 		exit (EXIT_FAILURE);
