@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/08 21:54:48 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/09 12:57:28 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <sys/wait.h>
-
 
 //DEFINES
 # define HEREDOC	"here_doc"
