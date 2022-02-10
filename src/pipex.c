@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 20:19:16 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/08 20:22:02 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/09 13:08:22 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	main(int argc, char **argv, char **envp)
 		pipex_error(main_status);
 	redirect(&container);
 	main_status = execute(&container, envp);
-	cleanup(&container);
-	if (main_status)
+	if (main_status || !(container.out_file->access_flags & F_CANWRITE))
 		exit (1);
+	cleanup(&container);
 	return (0);
 }
