@@ -57,7 +57,13 @@ $(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c
 
 # @echo -e "$(COMPILE_PIPEX_OUT)"
 
-all:	$(NAME)
+all: $(NAME)
+	@if [ -e $(NAME) ]; \
+		then \
+		echo -e $(GREEN)">>>>>>>> Archive successful\n>>>>>>>>\n"$(RESET_COL); \
+	else \
+		echo -e "compilation failed"; \
+	fi
 
 silent_libft:
 	@echo -e "-------------------libft.a-------------------"
