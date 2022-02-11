@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 20:20:00 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/09 18:03:51 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/11 16:36:40 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void	execute_child(char *const *envp, t_cmd *cmd_i)
 
 	status = 0;
 	dup2(cmd_i->out_fd, STDOUT_FILENO);
+	close(cmd_i->out_fd);
 	if (cmd_i->cmd_stat && cmd_i->in_fd > -1)
 		cmd_error(cmd_i);
 	if (cmd_i->cmd_stat || cmd_i->in_fd < 0)
@@ -26,9 +27,8 @@ static void	execute_child(char *const *envp, t_cmd *cmd_i)
 	exit (EXIT_FAILURE);
 }
 
-static int	execute_cmds(char *const *envp, t_cmd *cmd_i)
+static void	execute_cmds(char *const *envp, t_cmd *cmd_i)
 {
-	int		status;
 	pid_t	pid;
 
 	dup2(cmd_i->in_fd, STDIN_FILENO);
@@ -37,9 +37,7 @@ static int	execute_cmds(char *const *envp, t_cmd *cmd_i)
 	if (pid == 0)
 		execute_child(envp, cmd_i);
 	close(cmd_i->out_fd);
-	status = 0;
-	waitpid(pid, &status, 0);
-	return (status);
+	return ;
 }
 
 int	execute(t_main_cont *cont, char *const *envp)
@@ -51,13 +49,16 @@ int	execute(t_main_cont *cont, char *const *envp)
 	status = 0;
 	while (i < cont->nb_cmds)
 	{
+		execute_cmds(envp, &(cont->first_cmd[i]));
 		if (i == cont->nb_cmds - 1 && cont->first_cmd[i].out_fd < 0)
 		{
 			file_error(cont->out_file);
 			break ;
 		}
-		status = execute_cmds(envp, &(cont->first_cmd[i]));
 		i++;
 	}
+	i = 0;
+	while (++i < cont->nb_cmds)
+		waitpid(0, &status, 0);
 	return (status);
 }

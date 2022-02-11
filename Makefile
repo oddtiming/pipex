@@ -2,13 +2,13 @@ NAME	=	pipex
 
 SHELL	=	bash
 
-GREEN	=	"\033[0;32m"
+GREEN			=	"\033[0;32m"
 GREEN_LITERAL	=	\033[0;32m
-BLUE	=	"\033[0;34m"
+BLUE			=	"\033[0;34m"
 BLUE_LITERAL	=	\033[0;34m
-RED	=	"\033[0;31m"
-RED_LITERAL	=	\033[0;31m
-RESET_COL	=	"\033[0m" 
+RED				=	"\033[0;31m"
+RED_LITERAL		=	\033[0;31m
+RESET_COL		=	"\033[0m" 
 RESET_LITERAL	=	\033[0m
 
 CFILES	=	cleanup.c \
@@ -29,22 +29,26 @@ OBJ_DIR	=	obj
 
 OBJS	=	$(addprefix $(OBJ_DIR)/, $(CFILES:.c=.o))
 
-INC	=	incl
+INC		=	incl
 
 CC		=	gcc
 
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-Wall -Wextra -Werror -g
 
-AR		=	ar
+LIBFT_DIR	=	./libft
+LIBFT		=	$(LIBFT_DIR)/libft.a
+LIBFT_FLAGS	=	-lft -Llibft
 
 ARFLAGS	=	rcs
 
-RM_OBJS		=	rm -rf $(OBJ_DIR) && make clean -sC ./libft
+RM_OBJS		=	rm -rf $(OBJ_DIR)
 RM_OBJS_OUT	=	$$($(RM_OBJS) 2>&1 | sed -e 's/error/\\\033[0;31merror\\\033[0m/g' -e 's/warning/\\\033[0;33mwarning\\\033[0m/g')
 RM_PROG		=	rm -f $(NAME)
 RM_PROG_OUT	=	$$($(RM_PROG) 2>&1 | sed -e 's/error/\\\033[0;31merror\\\033[0m/g' -e 's/warning/\\\033[0;33mwarning\\\033[0m/g')
+RM_LIBFT		=	make clean -sC ./libft
+RM_LIBFT_OUT	=	$$($(RM_LIBFT) 2>&1 | sed -e 's/error/\\\033[0;31merror\\\033[0m/g' -e 's/warning/\\\033[0;33mwarning\\\033[0m/g')
 
-COMPILE_PIPEX	=	$(CC) $(CFLAGS) -lft -Llibft $(OBJS) -o $(NAME)
+COMPILE_PIPEX	=	$(CC) $(CFLAGS) $(LIBFT_FLAGS) $(OBJS) -o $(NAME)
 COMPILE_PIPEX_OUT	=	$$($(COMPILE_PIPEX) 2>&1 | sed -e 's/error/\\\033[0;31merror\\\033[0m/g' -e 's/warning/\\\033[0;33mwarning\\\033[0m/g')
 
 COMPILE_C	=	$(CC) $(CFLAGS) -I$(INC) -o $@ -c $<
@@ -57,34 +61,46 @@ $(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c
 
 # @echo -e "$(COMPILE_PIPEX_OUT)"
 
+
 all: $(NAME)
 	@if [ -e $(NAME) ]; \
 		then \
-		echo -e $(GREEN)">>>>>>>> Archive successful\n>>>>>>>>\n"$(RESET_COL); \
+		echo -e $(GREEN)">>>>>>>> Compilation successful\n>>>>>>>>"$(RESET_COL); \
 	else \
-		echo -e "compilation failed"; \
+		echo -e $(RED)">>>>>>>> Compilation failed\n>>>>>>>>"$(RESET_COL); \
 	fi
 
-silent_libft:
-	@echo -e "-------------------libft.a-------------------"
-	@echo -e $(BLUE)"\n>>>>>>>> Compiling libft.a ..."$(RESET_COL)
-	@make -s bonus -C ./libft
-	@echo -e $(GREEN)">>>>>>>> Archive successful\n>>>>>>>>\n"$(RESET_COL)
 
-$(NAME):	libft $(OBJS)
-	@echo -e "\n-------------------$(NAME)-------------------"
+$(NAME):	libft pretty_print $(OBJS)
 	@echo -e "$(BLUE_LITERAL)\n>>>>>>>> Compiling $(NAME) ...$(RESET_LITERAL)$(COMPILE_PIPEX_OUT)"
-	@echo -e $(GREEN)">>>>>>>> Build successful\n>>>>>>>>"$(RESET_COL)
 
-clean:	
-	@echo -e "$(BLUE_LITERAL)\n>>>>>>>> Deleting obj files$(RESET_LITERAL)$(RM_OBJS_OUT)"
-	@echo -e "$(RED_LITERAL)>>>>>>>> obj files deleted\n>>>>>>>>$(RESET_LITERAL)"
-
-fclean:	clean
-	@echo -e "$(BLUE_LITERAL)\n>>>>>>>> Deleting $(NAME)$(RESET_LITERAL)$(RM_PROG_OUT)"
-	@echo -e "$(RED_LITERAL)>>>>>>>> $(NAME) deleted\n>>>>>>>>$(RESET_LITERAL)"
+silent_libft:
+	@echo -e "-------------------libft.a-------------------\n"
+	@echo -e $(BLUE)">>>>>>>> Archiving libft.a ..."$(RESET_COL)
+	@make -s bonus -C $(LIBFT_DIR)
+	@if [ -e $(LIBFT) ]; \
+		then \
+		echo -e $(GREEN)">>>>>>>> Archive successful\n>>>>>>>>"$(RESET_COL); \
+	else \
+		echo -e $(RED)">>>>>>>> Archive failed\n>>>>>>>>"$(RESET_COL); \
+	fi
 
 libft: silent_libft
+
+pretty_print: 
+	@echo -e "\n-------------------$(NAME)-------------------"
+
+clean:	
+	@echo -e "$(RED_LITERAL)>>>>>>>> Deleting obj files$(RESET_LITERAL)$(RM_OBJS_OUT)"
+	@echo -e "$(GREEN_LITERAL)>>>>>>>> obj files deleted\n>>>>>>>>$(RESET_LITERAL)"
+
+clean_libft:	
+	@echo -e "$(RED_LITERAL)>>>>>>>> make fclean -sC libft $(RESET_LITERAL)$(RM_LIBFT_OUT)"
+	@echo -e "$(GREEN_LITERAL)>>>>>>>> libft cleaned\n>>>>>>>>$(RESET_LITERAL)"
+
+fclean:	clean clean_libft
+	@echo -e "$(RED_LITERAL)>>>>>>>> Deleting $(NAME)$(RESET_LITERAL)$(RM_PROG_OUT)"
+	@echo -e "$(GREEN_LITERAL)>>>>>>>> ./$(NAME) deleted\n>>>>>>>>$(RESET_LITERAL)"
 
 re:	fclean all
 
