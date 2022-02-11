@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 20:20:00 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/08 20:20:01 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/10 13:13:13 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static int	execute_cmds(char *const *envp, t_cmd *cmd_i)
 		execute_child(envp, cmd_i);
 	close(cmd_i->out_fd);
 	status = 0;
-	waitpid(pid, &status, 0);
 	return (status);
 }
 
@@ -59,5 +58,6 @@ int	execute(t_main_cont *cont, char *const *envp)
 		status = execute_cmds(envp, &(cont->first_cmd[i]));
 		i++;
 	}
+	waitpid(-1, &status, 0);
 	return (status);
 }
