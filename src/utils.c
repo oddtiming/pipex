@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 20:19:25 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/08 20:20:49 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/09 13:35:04 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+#include <stdio.h>
 
 //This fct needs reviewing, I do not like how it handles memory 
 //allocation and its potential failure. See Notion page for more details.
@@ -40,14 +41,30 @@ char	*get_env_var(char *const *envp, char *var_name)
 	return (NULL);
 }
 
+void	print_usage(void)
+{
+	printf(">>>>>>>> Usage:\n");
+	printf("$> ./pipex\033[0;35m in_file\033[0;36m cmd_1 ... cmd_n");
+	printf("\033[0;35m out_file\n");
+	printf("\033[0m <======>\n");
+	printf("$> <\033[0;35m in_file\033[0;36m cmd_1\033[0m | ... |");
+	printf("\033[0;36m cmd_n \033[0m >\033[0;35m out_file\n\033[0m");
+	printf("\n>>>>>>> here_doc:\n");
+	printf("$> ./pipex\033[0;31m here_doc\033[0;35m DELIMITER");
+	printf("\033[0;36m cmd_1 ... cmd_n\033[0;35m out_file\n");
+	printf("\033[0m <======>\n");
+	printf("$> <<\033[0;35m DELIMITER\033[0;36m cmd_1\033[0m | ... |");
+	printf("\033[0;36m cmd_n \033[0m >>\033[0;35m out_file\n\033[0m");
+}
+
 void	check_args(int argc, char **argv)
 {
 	if (argc < _ARGC_MIN || \
 			(!ft_strncmp(argv[1], "here_doc", sizeof("here_doc")) && \
 			argc < _ARGC_MIN + 1))
 	{
-		write(2, "pipex: Imma need at least 4 args\n", \
-			sizeof("pipex: Imma need at least 4 args\n"));
+		ft_putstr_fd("pipex: wrong argv: Imma need at least 2 cmds\n", 2);
+		print_usage();
 		exit(EXIT_FAILURE);
 	}
 	return ;
