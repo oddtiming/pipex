@@ -6,11 +6,11 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:34 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/08 16:08:18 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/15 20:50:20 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incl/pipex.h"
+#include "pipex.h"
 
 t_error	init(t_main_cont *container, int argc)
 {
@@ -20,6 +20,7 @@ t_error	init(t_main_cont *container, int argc)
 	if (init_status)
 		return (init_status);
 	init_status = init_cmds(container->first_cmd, container->nb_cmds);
+	ft_putstr_fd("finished init_cmds\n", 2);
 	if (init_status)
 		return (init_status);
 	return (0);
@@ -37,6 +38,11 @@ t_error	init_container(t_main_cont *container, int nb_cmds)
 	container->first_cmd = malloc(container->nb_cmds * sizeof(t_cmd));
 	if (!container->first_cmd)
 		return (E_MALLOC);
+	container->child_pids = malloc(container->nb_cmds * sizeof(int));
+	if (!container->child_pids)
+		return (E_MALLOC);
+	ft_memset(&(container->child_pids), 0, container->nb_cmds);
+	// ft_memset(container, 0, sizeof(container));
 	return (0);
 }
 

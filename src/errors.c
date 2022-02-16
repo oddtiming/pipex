@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 20:20:10 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/08 20:20:12 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/15 20:28:21 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,5 @@ void	pipex_error(t_error err)
 	else if (err & E_ENVPATH)
 		ft_putstr_fd("Warning: env does not contain a $PATH\n", 2);
 	if (!(err == E_ENVPATH))
-		exit (1);
+		exit (EXIT_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 20:19:53 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/08 20:19:54 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/15 20:30:57 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,10 @@ static void	free_main_cont(t_main_cont *cont)
 
 	if (cont->pathv)
 		ft_free_split(cont->pathv);
-	if (cont->in_file && cont->in_file->filepath)
-	{
-		if (cont->in_file->filepath)
-			free (cont->in_file->filepath);
-		free(cont->in_file);
-	}
-	if (cont->out_file && cont->out_file->filepath)
-	{
-		if (cont->out_file->filepath)
-			free (cont->out_file->filepath);
-		free(cont->out_file);
-	}
+	free (cont->in_file->filepath);
+	free (cont->in_file);
+	free (cont->out_file->filepath);
+	free (cont->out_file);
 	i = 0;
 	while (cont->first_cmd && i < cont->nb_cmds)
 	{
@@ -37,8 +29,8 @@ static void	free_main_cont(t_main_cont *cont)
 			ft_free_split(cont->first_cmd[i].cmd_argv);
 		i++;
 	}
-	if (cont->first_cmd)
-		free (cont->first_cmd);
+	free (cont->first_cmd);
+	free (cont->child_pids);
 }
 
 void	close_fds(t_main_cont *cont)

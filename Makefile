@@ -15,7 +15,8 @@ CFILES	=	cleanup.c \
 			parse.c \
 			pipex.c \
 			redirect.c \
-			utils.c
+			utils.c \
+			waitpid.c
 
 SRC_DIR	= src
 SRCS	= $(addprefix $(SRC_DIR)/, $(CFILES))

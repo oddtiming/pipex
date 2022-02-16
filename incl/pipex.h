@@ -6,7 +6,7 @@
 /*   By: iyahoui- <iyahoui-@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 22:46:09 by iyahoui-          #+#    #+#             */
-/*   Updated: 2022/02/09 12:57:28 by iyahoui-         ###   ########.fr       */
+/*   Updated: 2022/02/15 20:42:26 by iyahoui-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <stdio.h>
 
 //DEFINES
 # define HEREDOC	"here_doc"
@@ -50,6 +51,7 @@ typedef struct s_main_container
 	t_file	*in_file;
 	t_file	*out_file;
 	char	**pathv;
+	int		*child_pids;
 	int		nb_cmds;
 }	t_main_cont;
 
@@ -83,6 +85,7 @@ char	*ft_strjoin_n(size_t nb_strings, ...);	//NEEDS STDARG LIB
 //Pipex-specific:
 void	check_args(int argc, char **argv);
 t_error	get_file_mode(char *filepath);
+void	add_waitpid(t_main_cont *cont, int pid);
 
 //INIT
 t_error	init(t_main_cont *container, int argc);
